@@ -1,8 +1,11 @@
 ![teacup](https://raw.github.com/goodeggs/teacup/master/docs/teacup.jpg)
 
 ## Getting Started
+Install
 
     $ npm install teacup
+
+and render
 
     {render, div, h1} = require 'teacup/tags'
     
