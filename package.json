@@ -1,0 +1,26 @@
+{
+  "name": "teacup",
+  "version": "0.0.0",
+  "description": "",
+  "main": "teacup.coffee",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/goodeggs/teacup.git"
+  },
+  "keywords": [
+    "template",
+    "coffeescipt",
+    "view",
+    "coffeekup",
+    "coffeecup",
+    "drykup"
+  ],
+  "devDependencies": {
+    "coffee-script": "*",
+    "mocha": "*",
+    "expect.js": "*"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
+}
