@@ -1,7 +1,7 @@
 {
   "name": "teacup",
   "version": "0.1.0",
-  "description": "",
+  "description": "Template HTML with Coffeescript functions",
   "main": "teacup.coffee",
   "repository": {
     "type": "git",
