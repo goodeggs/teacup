@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, comment} = require '../lib/tags'
+{render, comment} = require '..'
 
 describe 'Comments', ->
   it 'renders HTML <!--comments-->', ->

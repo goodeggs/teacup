@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, div, img} = require '../lib/tags'
+{render, div, img} = require '..'
 
 describe 'CSS Selectors', ->
   describe 'id selector', ->

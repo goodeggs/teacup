@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{renderable, coffeescript} = require '../lib/tags'
+{renderable, coffeescript} = require '..'
           "pretest" : "coffee -cl -o lib src"
 
 describe 'coffeescript', ->

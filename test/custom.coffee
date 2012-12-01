@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, tag} = require '../lib/tags'
+{render, tag} = require '..'
 
 describe 'custom tag', ->
   it 'should render', ->
