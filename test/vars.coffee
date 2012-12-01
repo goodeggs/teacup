@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, h1} = require '../tags'
+{render, h1} = require '../lib/tags'
 
 describe 'Context data', ->
   it 'is an argument to the template function', ->

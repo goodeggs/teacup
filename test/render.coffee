@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, cede, div, p, strong, a} = require '../tags'
+{render, cede, div, p, strong, a} = require '../lib/tags'
 
 describe 'render', ->
   describe 'nested in a template', ->

@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{renderable, text} = require '../tags'
+{renderable, text} = require '../lib/tags'
 
 describe 'text', ->
   it 'renders text verbatim', ->

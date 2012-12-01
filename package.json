@@ -2,7 +2,7 @@
   "name": "teacup",
   "version": "0.1.0",
   "description": "Template HTML with Coffeescript functions",
-  "main": "teacup.coffee",
+  "main": "lib/teacup",
   "repository": {
     "type": "git",
     "url": "git://github.com/goodeggs/teacup.git"
@@ -21,6 +21,7 @@
     "expect.js": "*"
   },
   "scripts": {
+    "pretest" : "coffee -cl -o lib src",
     "test": "mocha"
   }
 }

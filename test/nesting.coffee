@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, div, p} = require '../tags'
+{render, div, p} = require '../lib/tags'
 
 describe 'nesting templates', ->
   it 'renders nested template in the same output', ->

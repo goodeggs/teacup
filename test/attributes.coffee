@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, a, br} = require '../tags'
+{render, a, br} = require '../lib/tags'
 
 describe 'Attributes', ->
 

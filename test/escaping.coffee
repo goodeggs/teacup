@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, escape, h1} = require '../tags'
+{render, escape, h1} = require '../lib/tags'
 
 describe 'Escaping', ->
   describe 'a script tag', ->

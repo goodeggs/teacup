@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, script} = require '../tags'
+{render, script} = require '../lib/tags'
 
 describe 'HereDocs', ->
   it 'preserves line breaks', ->
