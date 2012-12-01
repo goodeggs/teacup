@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, ie, link} = require '../tags'
+{render, ie, link} = require '..'
 
 describe 'IE conditionals', ->
   it 'renders conditional comments', ->

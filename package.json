@@ -1,19 +1,23 @@
 {
   "name": "teacup",
   "version": "0.1.0",
-  "description": "Template HTML with Coffeescript functions",
-  "main": "teacup.coffee",
+  "description": "Render HTML with native CoffeeScript templates. No magic, no fuss.",
+  "main": "lib/index",
   "repository": {
     "type": "git",
     "url": "git://github.com/goodeggs/teacup.git"
   },
   "keywords": [
     "template",
-    "coffeescipt",
+    "coffeescript",
+    "coffee-script",
+    "coffee",
+    "render",
     "view",
     "coffeekup",
     "coffeecup",
-    "drykup"
+     "drykup",
+     "express"
   ],
   "devDependencies": {
     "coffee-script": "*",
@@ -21,6 +25,7 @@
     "expect.js": "*"
   },
   "scripts": {
+    "pretest" : "coffee -cl -o lib src",
     "test": "mocha"
   }
 }
