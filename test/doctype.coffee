@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, doctype} = require '../tags'
+{render, doctype} = require '..'
 
 describe 'doctype', ->
   it 'default should render html5 doctype', ->

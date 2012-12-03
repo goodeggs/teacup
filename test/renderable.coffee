@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{renderable, div, span} = require '../tags'
+{renderable, div, span} = require '..'
 
 describe 'renderable decorator', ->
   it 'makes a template directly callable', ->

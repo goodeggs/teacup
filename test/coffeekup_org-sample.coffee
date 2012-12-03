@@ -1,6 +1,6 @@
 expect = require 'expect.js'
 {renderable, doctype, html, head, meta, link, style, title, script, body,
-coffeescript, header, section, nav, footer, h1, h2, ul, li, a, p} = require '../tags'
+coffeescript, header, section, nav, footer, h1, h2, ul, li, a, p} = require '..'
 
 describe 'coffeekup.org example', ->
 
