@@ -76,6 +76,9 @@ class Teacup
   renderAttr: (name, value) -> 
     if not value? or value is false
       return ''
+
+    if name is 'data' and typeof value is 'object'
+      return (@renderAttr "data-#{k}", v for k,v of value).join('')
     
     if value is true
       value = name

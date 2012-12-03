@@ -37,3 +37,8 @@ describe 'Attributes', ->
     it 'is comma separated', ->
       template = -> br foo: [1, 2, 3]
       expect(render template).to.equal '<br foo="1,2,3" />'
+
+  describe 'data attribute', ->
+    it 'expands attributes', ->
+      template = -> br data: { name: 'Name', value: 'Value' }
+      expect(render template).to.equal '<br data-name="Name" data-value="Value" />'
