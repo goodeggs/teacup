@@ -17,9 +17,11 @@ elements =
  canvas caption cite code colgroup datalist dd del details dfn div dl dt em
  fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup
  html i iframe ins kbd label legend li map mark menu meter nav noscript object
- ol optgroup option output p pre progress q rp rt ruby s samp script section
- select small span strong style sub summary sup table tbody td textarea tfoot
+ ol optgroup option output p pre progress q rp rt ruby s samp section
+ select small span strong sub summary sup table tbody td textarea tfoot
  th thead time title tr u ul video'
+
+  raw: 'script style' 
 
   # Valid self-closing HTML 5 elements.
   void: 'area base br col command embed hr img input keygen link meta param
@@ -83,7 +85,7 @@ class Teacup
     if value is true
       value = name
 
-    return " #{name}=#{@quote value.toString()}"
+    return " #{name}=#{@quote @escape value.toString()}"
 
   attrOrder: ['id', 'class']
   renderAttrs: (obj) -> 
@@ -149,34 +151,43 @@ class Teacup
 
   tag: (tagName, args...) ->
     {attrs, contents} = @normalizeArgs args
-    @text "<#{tagName}#{@renderAttrs attrs}>"
+    @raw "<#{tagName}#{@renderAttrs attrs}>"
     @renderContents contents
-    @text "</#{tagName}>"
+    @raw "</#{tagName}>"
+
+  rawTag: (tagName, args...) ->
+    {attrs, contents} = @normalizeArgs args
+    @raw "<#{tagName}#{@renderAttrs attrs}>"
+    @raw contents
+    @raw "</#{tagName}>"
 
   selfClosingTag: (tag, args...) ->
     {attrs, contents} = @normalizeArgs args
     if contents
       throw new Error "Teacup: <#{tag}/> must not have content.  Attempted to nest #{content}"
-    @text "<#{tag}#{@renderAttrs attrs} />"
+    @raw "<#{tag}#{@renderAttrs attrs} />"
 
   coffeescript: ->
     throw new Error 'Teacup: coffeescript tag not implemented'
 
   comment: (text) ->
-    @text "<!--#{text}-->"
+    @raw "<!--#{@escape text}-->"
 
   doctype: (type=5) ->
-    @text doctypes[type]
+    @raw doctypes[type]
 
   ie: (condition, contents) ->
-    @text "<!--[if #{condition}]>"
+    @raw "<!--[if #{@escape condition}]>"
     @renderContents contents
-    @text "<![endif]-->"
+    @raw "<![endif]-->"
 
   text: (s) ->
     unless @htmlOut?
       throw new Error("Teacup: can't call a tag function outside a rendering context")
-    @htmlOut += s?.toString() or ''
+    @htmlOut += s and @escape(s.toString()) or ''
+
+  raw: (s) ->
+    @htmlOut += s
 
   #
   # Filters
@@ -198,13 +209,17 @@ class Teacup
   #
   tags: ->
     bound = {}
-    for method in 'cede coffeescript comment doctype escape ie render renderable tag text'.split(' ') 
+    for method in 'cede coffeescript comment doctype escape ie raw render renderable script tag text'.split(' ') 
       do (method) =>
         bound[method] = (args...) => @[method].apply @, args
 
     for tagName in merge_elements 'regular', 'obsolete'
       do (tagName) =>
         bound[tagName] = (args...) => @tag tagName, args...
+
+    for tagName in merge_elements 'raw'
+      do (tagName) =>
+        bound[tagName] = (args...) => @rawTag tagName, args...
         
     for tagName in merge_elements 'void', 'obsolete_void'
       do (tagName) =>
