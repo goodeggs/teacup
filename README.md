@@ -33,6 +33,7 @@ app.configure ->
 Then write your views as regular old coffee files that export a renderable template.
 
 ```coffee
+# views/example.coffee
 {renderable, div, h1} = require 'teacup'
 
 module.exports = renderable ({title}) ->
