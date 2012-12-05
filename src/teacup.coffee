@@ -209,23 +209,31 @@ class Teacup
   #
   tags: ->
     bound = {}
-    for method in 'cede coffeescript comment doctype escape ie raw render renderable script tag text'.split(' ') 
+
+    boundMethodNames = [].concat(
+      'cede coffeescript comment doctype escape ie raw render renderable script tag text'.split(' ')
+      merge_elements 'regular', 'obsolete', 'raw', 'void', 'obsolete_void'
+    )
+    for method in boundMethodNames
       do (method) =>
         bound[method] = (args...) => @[method].apply @, args
-
-    for tagName in merge_elements 'regular', 'obsolete'
-      do (tagName) =>
-        bound[tagName] = (args...) => @tag tagName, args...
-
-    for tagName in merge_elements 'raw'
-      do (tagName) =>
-        bound[tagName] = (args...) => @rawTag tagName, args...
-        
-    for tagName in merge_elements 'void', 'obsolete_void'
-      do (tagName) =>
-        bound[tagName] = (args...) => @selfClosingTag tagName, args...
+        console.log method, @[method]
 
     return bound
+
+# Define tag functions on the prototype for pretty stack traces
+for tagName in merge_elements 'regular', 'obsolete'
+  do (tagName) ->
+    Teacup::[tagName] = (args...) -> @tag tagName, args...
+
+for tagName in merge_elements 'raw'
+  do (tagName) ->
+    Teacup::[tagName] = (args...) -> @rawTag tagName, args...
+
+for tagName in merge_elements 'void', 'obsolete_void'
+  do (tagName) ->
+    Teacup::[tagName] = (args...) -> @selfClosingTag tagName, args...
+
 
 if module?.exports
   module.exports = Teacup
