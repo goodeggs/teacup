@@ -217,7 +217,6 @@ class Teacup
     for method in boundMethodNames
       do (method) =>
         bound[method] = (args...) => @[method].apply @, args
-        console.log method, @[method]
 
     return bound
 
