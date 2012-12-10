@@ -55,12 +55,27 @@ class Teacup
     previous = @resetBuffer('')
     try
       template(args...)
+    catch error
+      throw @cleanStack error
     finally
       result = @resetBuffer previous
     return result
 
   # alias render for coffeecup compatibility
   cede: (args...) -> @render(args...)
+
+  cleanStack: do ->
+    lineExpressions = [
+      '\\s*at Teacup\\.renderContents .*'
+      '\\s*at Teacup\\.tag .*'
+      '\\s*at Teacup.* \\[as (\\w+)\\].*'
+      '\\s*at Teacup\\.tags\\.bound.*$'
+    ]
+    tagExpression = new RegExp "^#{lineExpressions.join '\\n'}", 'mg'
+
+    (error) ->
+      error.stack = error.stack?.replace tagExpression, '    at Teacup.$1'
+      return error
   
   renderable: (template) ->
     teacup = @
@@ -69,6 +84,8 @@ class Teacup
         teacup.htmlOut = ''
         try
           template.apply @, args
+        catch error
+          throw teacup.cleanStack error
         finally
           result = teacup.resetBuffer()
         return result
@@ -232,7 +249,6 @@ for tagName in merge_elements 'raw'
 for tagName in merge_elements 'void', 'obsolete_void'
   do (tagName) ->
     Teacup::[tagName] = (args...) -> @selfClosingTag tagName, args...
-
 
 if module?.exports
   module.exports = Teacup
