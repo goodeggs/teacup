@@ -128,7 +128,7 @@ class Teacup
     attrs = {}
     selector = null
     contents = null
-    for arg, index in args
+    for arg, index in args when arg?
       switch typeof arg
         when 'string'
           if index is 0 and @isSelector(arg)
