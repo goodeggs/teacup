@@ -5,11 +5,15 @@ describe 'Auto escaping', ->
   describe 'a script tag', ->
     it "adds HTML entities for sensitive characters", ->
       template = -> h1 "<script>alert('\"owned\" by c&a &copy;')</script>"
-      expect(render template).to.equal "<h1>&lt;script&gt;alert(&#39;&quot;owned&quot; by c&amp;a &amp;copy;&#39;)&lt;/script&gt;</h1>"
+      expect(render template).to.equal "<h1>&lt;script&gt;alert('&quot;owned&quot; by c&amp;a &amp;copy;')&lt;/script&gt;</h1>"
 
   it 'escapes tag attributes', ->
     template = -> input name: '"pwned'
     expect(render template).to.equal '<input name="&quot;pwned" />'
+
+  it 'does not escape single quotes in tag attributes', ->
+    template = -> input name: "'pwned"
+    expect(render template).to.equal '<input name="\'pwned" />'
 
 describe 'raw filter', ->
   it 'prints sensitive characters verbatim', ->

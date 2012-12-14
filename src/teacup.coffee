@@ -210,16 +210,16 @@ class Teacup
   # Filters
   # return strings instead of appending to buffer
   #
+
+  # Don't escape single quote (') because we always quote attributes with double quote (")
   escape: (text) ->
     text.toString().replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;')
 
   quote: (value) ->
-    q = (if '"' in value then "'" else '"')
-    return q + value + q
+    "\"#{value}\""
 
   #
   # Binding
