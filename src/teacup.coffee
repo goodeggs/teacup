@@ -251,7 +251,9 @@ for tagName in merge_elements 'void', 'obsolete_void'
     Teacup::[tagName] = (args...) -> @selfClosingTag tagName, args...
 
 if module?.exports
-  module.exports = Teacup
+  module.exports = new Teacup().tags()
+  module.exports.Teacup = Teacup
 else 
-  window.teacup = Teacup
+  window.teacup = new Teacup().tags()
+  window.teacup.Teacup = Teacup
   
