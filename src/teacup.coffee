@@ -184,8 +184,13 @@ class Teacup
       throw new Error "Teacup: <#{tag}/> must not have content.  Attempted to nest #{content}"
     @raw "<#{tag}#{@renderAttrs attrs} />"
 
-  coffeescript: ->
-    throw new Error 'Teacup: coffeescript tag not implemented'
+  coffeescript: (fn) ->
+    @raw """<script type="text/javascript">(function() {
+      var __slice = [].slice,
+          __hasProp = {}.hasOwnProperty,
+          __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+      (#{fn.toString()})();
+    })();</script>"""
 
   comment: (text) ->
     @raw "<!--#{@escape text}-->"
