@@ -47,6 +47,34 @@ module.exports = renderable ({title}) ->
 
 You can use Teacup templates even if your Express app is not using CoffeeScript.
 
+### connect-assets
+
+If you are using [connect-assets](https://github.com/TrevorBurnham/connect-assets) to compile your CoffeeScript in
+an asset pipeline. You can use the Teacup middleware which registers the connect-assets `js` and `css` helpers with Teacup.
+
+```coffee
+express = require 'express'
+connectAssets = require 'teacup/lib/connect-assets'
+app = express()
+app.configure ->
+  app.use connectAssets(src: 'assets', jsDir: 'javascripts', cssDir: 'stylesheets')
+```
+
+And in your templates:
+
+```coffee
+{renderable, js, css, html, head, body} = require 'teacup'
+
+module.exports = renderable ->
+  html ->
+    head ->
+      js 'app'
+      css 'app'
+    body ->
+      # ...
+```
+
+The Teacup middleware passes the provided options to connect-assets and returns an instance of the connect-assets middleware.
 
 Examples
 ---------
