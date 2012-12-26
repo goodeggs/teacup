@@ -11,6 +11,9 @@ Getting Started
 
     $ npm install teacup
 
+If you're interested in using Teacup with Rails, [Teacup::Rails](https://github.com/goodeggs/teacup-rails) makes Teacup
+available to the asset pipeline in Rails 3.1+.
+
 ### Render
 
 ``` coffee
