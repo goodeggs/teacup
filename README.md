@@ -9,6 +9,9 @@ Getting Started
 
 ### Install
 
+To use in Node, either for templates rendered on the server or for templates compiled with
+[connect-assets](https://github.com/TrevorBurnham/connect-assets):
+
     $ npm install teacup
 
 If you're interested in using Teacup with Rails, [Teacup::Rails](https://github.com/goodeggs/teacup-rails) makes Teacup
@@ -78,6 +81,25 @@ module.exports = renderable ->
 ```
 
 The Teacup middleware passes the provided options to connect-assets and returns an instance of the connect-assets middleware.
+
+### Browser
+
+To use for client-side rendering, all you need is [teacup.js](https://raw.github.com/goodeggs/teacup/master/lib/teacup.js)
+from this project. Since Teacup is all about CoffeeScript, it only makes sense to use if you are writing your
+views in CoffeeScript. Use it with an asset pipeline like in Rails or connect-assets (see above) or compile your templates
+as part of your build process.
+
+In the browser, Teacup exports window.teacup. In the examples below, simply replace `require 'teacup'` with `teacup`.
+
+```coffee
+{renderable, ul, li} = teacup
+
+template = renderable (items)->
+  ul ->
+    li item for item in items
+
+console.log template(['One', 'Two'])
+```
 
 Examples
 ---------
