@@ -201,12 +201,16 @@ FAQ
 
 **How's this different from CoffeeCup?**
 
-[CoffeeCup](/gradus/coffeecup) is the currently maintained fork of [CoffeeKup](/mauricemach/coffeekup) and is what we were using at Good Eggs before switching to Teacup. The problem with CoffeeCup is that it uses some `eval` magic to put the tag functions in scope. This magic breaks closure scope so you can't actually write templates using the functional constructs that you'd expect.
+[CoffeeCup](http://github.com/gradus/coffeecup) is the currently maintained fork of
+[CoffeeKup](http://github.com/mauricemach/coffeekup) and is what we were using at Good Eggs before switching to Teacup.
+The problem with CoffeeCup is that it uses some `eval` magic to put the tag functions in scope. This magic breaks
+closure scope so you can't actually write templates using the functional constructs that you'd expect.
 
 Legacy
 -------
 
-[Markaby](/markaby/markaby) begat [CoffeeKup](/mauricemach/coffeekup) begat [CoffeeCup](/gradus/coffeecup) and [DryKup](/mark-hahn/drykup) which begat **Teacup**.
+[Markaby](http://github.com/markaby/markaby) begat [CoffeeKup](http://github.com/mauricemach/coffeekup) begat
+[CoffeeCup](http://github.com/gradus/coffeecup) and [DryKup](http://github.com/mark-hahn/drykup) which begat **Teacup**.
 
 Contributing
 -------------
