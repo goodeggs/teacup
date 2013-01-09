@@ -101,6 +101,36 @@ template = renderable (items)->
 console.log template(['One', 'Two'])
 ```
 
+### Backbone
+
+You can write your template in the same file a Backbone View and call your template from the view's `render` method like so:
+```coffee
+{renderable, div, h1, ul, li, p, form, input} = teacup
+
+template = renderable ({kids}) ->
+  div ->
+    h1 "Welcome to our tea party"
+    p "We have a few kids at the table..."
+    ul ->
+      kids.each (kid) ->
+        li kid.get 'name'
+    form ->
+      input placeholder: 'Add another'
+
+class PartyView extends Backbone.View
+
+  constructor: ({kids}) ->
+    @kids = new Backbone.Collection kids
+    super()
+
+  render: ->
+    @$el.html template({@kids})
+    @$('form input').focus()
+    @
+    
+```
+Check out [teacup-backbone-example](https://github.com/goodeggs/teacup-backbone-example) for a complete Backbone + Express app.
+
 Examples
 ---------
 
