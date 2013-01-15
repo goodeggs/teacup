@@ -259,6 +259,8 @@ for tagName in merge_elements 'void', 'obsolete_void'
 if module?.exports
   module.exports = new Teacup().tags()
   module.exports.Teacup = Teacup
+else if typeof define is 'function' and define.amd
+  define('teacup', [], -> new Teacup().tags())
 else 
   window.teacup = new Teacup().tags()
   window.teacup.Teacup = Teacup
