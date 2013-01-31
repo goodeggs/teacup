@@ -4,6 +4,8 @@ Teacup is templates in CoffeeScript.
 
 One of the great things about CoffeeScript is it's ability to support native DSLs. Teacup is a native CoffeeScript DSL for producing HTML. Use composition and functional constructs, import helpers just as you would any other dependency.
 
+[![Build Status](https://travis-ci.org/goodeggs/teacup.png)](https://travis-ci.org/goodeggs/teacup)
+
 Getting Started
 ---------------
 
