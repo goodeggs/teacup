@@ -207,7 +207,7 @@ class Teacup
   text: (s) ->
     unless @htmlOut?
       throw new Error("Teacup: can't call a tag function outside a rendering context")
-    @htmlOut += s and @escape(s.toString()) or ''
+    @htmlOut += s? and @escape(s.toString()) or ''
 
   raw: (s) ->
     @htmlOut += s
