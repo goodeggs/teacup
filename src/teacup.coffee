@@ -155,9 +155,12 @@ class Teacup
         when 'function', 'number', 'boolean'
           contents = arg
         when 'object'
-          attrs = arg
+          if arg.constructor == Object
+            attrs = arg
+          else
+            contents = arg
         else  
-          console.log "Teacup: invalid argument: #{arg.toString()}"
+          contents = arg
 
     if selector?
       {id, classes} = selector
