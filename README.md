@@ -11,9 +11,6 @@ Integrate with the tools you love: Express, Backbone, Rails, and more.
 The Basics
 ---------------
 
-If you're interested in using Teacup with Rails, [Teacup::Rails](https://github.com/goodeggs/teacup-rails) makes Teacup
-available to the asset pipeline in Rails 3.1+.
-
 Use the `renderable` helper to create a function that returns an HTML string when called.
 
 ```coffee
@@ -158,6 +155,11 @@ class PartyView extends Backbone.View
     
 ```
 Check out [teacup-backbone-example](https://github.com/goodeggs/teacup-backbone-example) for a complete Backbone + Express app.
+
+
+### Rails
+
+The [Teacup::Rails](https://github.com/goodeggs/teacup-rails) gem makes Teacup available to the asset pipeline in Rails 3.1+.
 
 Guide
 ---------
