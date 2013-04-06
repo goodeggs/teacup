@@ -184,7 +184,7 @@ console.log render ->
 
 ### Text
 
-The text helper inserts a string in the template wihtout wrapping it in a tag.  It creates a [text node](https://developer.mozilla.org/en-US/docs/DOM/Text).
+The text helper inserts a string in the template without wrapping it in a tag.  It creates a [text node](https://developer.mozilla.org/en-US/docs/DOM/Text).
 
 ```coffee
 {render, text, b, em, p} = require 'teacup'
