@@ -182,6 +182,21 @@ console.log render ->
 # Outputs <div><h1>Header</h1></div>
 ```
 
+### Text
+
+The text helper inserts a string in the template wihtout wrapping it in a tag.  It creates a [text node](https://developer.mozilla.org/en-US/docs/DOM/Text).
+
+```coffee
+{render, text, b, em, p} = require 'teacup'
+
+console.log render ->
+  p ->
+    text 'Sometimes you just want '
+    b 'plain'
+    text ' text.'
+# Outputs <p>Sometimes you just want <b>plain</b> text.</p>
+```
+
 ### Helpers
 
 Write view helpers as renderable functions and require them as needed.
