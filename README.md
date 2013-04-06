@@ -39,7 +39,6 @@ console.log output
 ```
 
 
-
 ### Express
 
 To use Teacup as your Express template engine:
@@ -109,12 +108,11 @@ The Teacup middleware passes the provided options to connect-assets and returns 
 
 ### Browser
 
-To use for client-side rendering, all you need is [teacup.js](https://raw.github.com/goodeggs/teacup/master/lib/teacup.js)
-from this project. Since Teacup is all about CoffeeScript, it only makes sense to use if you are writing your
-views in CoffeeScript. Use it with an asset pipeline like in Rails or connect-assets (see above) or compile your templates
-as part of your build process.
+To use for client-side rendering, all you need is [teacup.js](https://raw.github.com/goodeggs/teacup/master/lib/teacup.js).  You can 
+toss it in a script tag, `require()` and browserify it, load it with an AMD loader, send it down an asset pipeline 
+like Rails or connect-assets, or use some sweet custom build process.
 
-In the browser, Teacup exports window.teacup. In the examples below, simply replace `require 'teacup'` with `teacup`.
+Teacup claims window.teacup if you arent using AMD or CommonJS.
 
 ```coffee
 {renderable, ul, li} = teacup
@@ -128,11 +126,11 @@ console.log template(['One', 'Two'])
 
 ### Backbone
 
-You can write your template in the same file a Backbone View and call your template from the view's `render` method like so:
+Feel free to write your template in the same file as a Backbone View and call it from `view.render()` like so:
 ```coffee
 {renderable, div, h1, ul, li, p, form, input} = teacup
 
-template = renderable ({kids}) ->
+template = renderable (kids) ->
   div ->
     h1 "Welcome to our tea party"
     p "We have a few kids at the table..."
@@ -144,12 +142,12 @@ template = renderable ({kids}) ->
 
 class PartyView extends Backbone.View
 
-  constructor: ({kids}) ->
+  constructor: (kids) ->
     @kids = new Backbone.Collection kids
     super()
 
   render: ->
-    @$el.html template({@kids})
+    @$el.html template(@kids)
     @$('form input').focus()
     @
     
@@ -186,7 +184,7 @@ console.log render ->
 
 ### Helpers
 
-Write your view helpers as renderable functions and require them as needed.
+Write view helpers as renderable functions and require them as needed.
 
 Here's a helpers file that defines a set of [microformats](http://microformats.org/wiki/hcalendar).
 
