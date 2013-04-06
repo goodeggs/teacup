@@ -2,34 +2,54 @@
 
 Teacup is templates in CoffeeScript.
 
-One of the great things about CoffeeScript is it's ability to support native DSLs. Teacup is a native CoffeeScript DSL for producing HTML. Use composition and functional constructs, import helpers just as you would any other dependency.
+Compose DSL functions to build strings of HTML.  
+Package templates and helpers in CommonJS, AMD modules, or vanilla coffeescript.  
+Integrate with the tools you love: Express, Backbone, Rails, and more.
 
 [![Build Status](https://travis-ci.org/goodeggs/teacup.png)](https://travis-ci.org/goodeggs/teacup)
 
-Getting Started
+The Basics
 ---------------
-
-### Install
-
-To use in Node, either for templates rendered on the server or for templates compiled with
-[connect-assets](https://github.com/TrevorBurnham/connect-assets):
-
-    $ npm install teacup
 
 If you're interested in using Teacup with Rails, [Teacup::Rails](https://github.com/goodeggs/teacup-rails) makes Teacup
 available to the asset pipeline in Rails 3.1+.
 
-### Render
+Use the `renderable` helper to create a function that returns an HTML string when called.
 
-``` coffee
-{render, div, h1} = require 'teacup'
+```coffee
+{renderable, ul, li} = require 'teacup'
 
-render ->
-  div '#sample', ->
-    h1 -> 'Hello, world'
+template = renderable (items)->
+  ul ->
+    li item for item in items
+
+console.log template(['One', 'Two'])
+# Outputs <ul><li>One</li><li>Two</li></ul>
 ```
 
+Use the `render` helper to render a template to a string immediately.
+
+```coffee
+{render, ul, li} = require 'teacup'
+
+output = render ->
+  ul ->
+    li 'First Item'
+    li 'Second Item'
+
+console.log output
+# Outputs <ul><li>First Item</li><li>Second Item</li></ul>
+```
+
+
+
 ### Express
+
+To use Teacup as your Express template engine:
+
+Install from npm
+
+    $ npm install teacup
 
 Register Teacup as a view engine.
 
@@ -58,7 +78,13 @@ You can use Teacup templates even if your Express app is not using CoffeeScript.
 ### connect-assets
 
 If you are using [connect-assets](https://github.com/TrevorBurnham/connect-assets) to compile your CoffeeScript in
-an asset pipeline. You can use the Teacup middleware which registers the connect-assets `js` and `css` helpers with Teacup.
+an asset pipeline, you can use the Teacup middleware which registers connect-assets `js` and `css` helpers with Teacup.
+
+Grab the module to get started
+
+    $ npm install teacup
+
+Then configure the middleware
 
 ```coffee
 express = require 'express'
@@ -133,37 +159,8 @@ class PartyView extends Backbone.View
 ```
 Check out [teacup-backbone-example](https://github.com/goodeggs/teacup-backbone-example) for a complete Backbone + Express app.
 
-Examples
+Guide
 ---------
-
-### Rendering
-
-Use the `render` helper to render a template immediately.
-
-```coffee
-{render, ul, li} = require 'teacup'
-
-output = render ->
-  ul ->
-    li 'First Item'
-    li 'Second Item'
-
-console.log output
-# Outputs <ul><li>First Item</li><li>Second Item</li></ul>
-```
-
-Use the `renderable` helper to create a function that can be called to render the template at a later time.
-
-```coffee
-{renderable, ul, li} = require 'teacup'
-
-template = renderable (items)->
-  ul ->
-    li item for item in items
-
-console.log template(['One', 'Two'])
-# Outputs <ul><li>One</li><li>Two</li></ul>
-```
 
 ### Escaping
 
@@ -222,7 +219,7 @@ module.exports = renderable ({events}) ->
 
 ### Compiling Templates
 
-Just use the CoffeeScript compiler.
+Just use the CoffeeScript compiler.  Uglify will make em real small.
 
 ```
 $ coffee -cl -o build src
