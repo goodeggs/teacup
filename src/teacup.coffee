@@ -184,7 +184,7 @@ class Teacup
   selfClosingTag: (tag, args...) ->
     {attrs, contents} = @normalizeArgs args
     if contents
-      throw new Error "Teacup: <#{tag}/> must not have content.  Attempted to nest #{content}"
+      throw new Error "Teacup: <#{tag}/> must not have content.  Attempted to nest #{contents}"
     @raw "<#{tag}#{@renderAttrs attrs} />"
 
   coffeescript: (fn) ->
