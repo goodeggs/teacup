@@ -2,8 +2,8 @@
 
 Teacup is templates in CoffeeScript.
 
-Compose DSL functions to build strings of HTML.  
-Package templates and helpers in CommonJS, AMD modules, or vanilla coffeescript.  
+Compose DSL functions to build strings of HTML.
+Package templates and helpers in CommonJS, AMD modules, or vanilla coffeescript.
 Integrate with the tools you love: Express, Backbone, Rails, and more.
 
 [![Build Status](https://travis-ci.org/goodeggs/teacup.png)](https://travis-ci.org/goodeggs/teacup)
@@ -19,7 +19,7 @@ Use the `renderable` helper to create a function that returns an HTML string whe
 template = renderable (teas)->
   ul ->
     for tea in teas
-      li tea  
+      li tea
     input type: 'button', value: 'Steep'
 
 console.log template(['Jasmine', 'Darjeeling'])
@@ -51,7 +51,7 @@ Install from npm
 
 Register Teacup as a view engine.
 
-``` coffee
+```coffee
 express = require 'express'
 teacup = require 'teacup/lib/express'
 
@@ -110,8 +110,8 @@ The Teacup middleware passes the provided options to connect-assets and returns 
 
 ### Browser
 
-To use for client-side rendering, all you need is [teacup.js](https://raw.github.com/goodeggs/teacup/master/lib/teacup.js).  You can 
-toss it in a script tag, `require()` and browserify it, load it with an AMD loader, send it down an asset pipeline 
+To use for client-side rendering, all you need is [teacup.js](https://raw.github.com/goodeggs/teacup/master/lib/teacup.js).  You can
+toss it in a script tag, `require()` and browserify it, load it with an AMD loader, send it down an asset pipeline
 like Rails or connect-assets, or use some sweet custom build process.
 
 Teacup claims window.teacup if you arent using AMD or CommonJS.
@@ -129,6 +129,7 @@ console.log template(['One', 'Two'])
 ### Backbone
 
 Feel free to write your template in the same file as a Backbone View and call it from `view.render()` like so:
+
 ```coffee
 {renderable, div, h1, ul, li, p, form, input} = teacup
 
@@ -152,7 +153,7 @@ class PartyView extends Backbone.View
     @$el.html template(@kids)
     @$('form input').focus()
     @
-    
+
 ```
 Check out [teacup-backbone-example](https://github.com/goodeggs/teacup-backbone-example) for a complete Backbone + Express app.
 
@@ -163,6 +164,30 @@ The [Teacup::Rails](https://github.com/goodeggs/teacup-rails) gem makes Teacup a
 
 Guide
 ---------
+
+### Ids and Classes
+
+Pass a CSS selector as the first argument to a tag function to add ids and classes.
+
+```coffee
+{render, div} = require 'teacup'
+
+console.log render ->
+  div '#confirm.btn.btn-small'
+# Outputs <div id="confirm" class="btn btn-small"></div>
+```
+
+### Attributes
+
+Define tag attributes with object literals.
+
+```coffee
+{render, button} = require 'teacup'
+
+console.log render ->
+  button '.btn', type: 'button', disabled: true, 'Click Me'
+# Outputs <button class="btn" type="button" disabled="disabled">Click Me</button>
+```
 
 ### Escaping
 
