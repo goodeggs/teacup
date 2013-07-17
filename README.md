@@ -14,14 +14,16 @@ The Basics
 Use the `renderable` helper to create a function that returns an HTML string when called.
 
 ```coffee
-{renderable, ul, li} = require 'teacup'
+{renderable, ul, li, input} = require 'teacup'
 
-template = renderable (items)->
+template = renderable (teas)->
   ul ->
-    li item for item in items
+    for tea in teas
+      li tea  
+    input type: 'button', value: 'Steep'
 
-console.log template(['One', 'Two'])
-# Outputs <ul><li>One</li><li>Two</li></ul>
+console.log template(['Jasmine', 'Darjeeling'])
+# Outputs <ul><li>Jasmine</li><li>Darjeeling</li></ul><input type="button" value="Steep"/>
 ```
 
 Use the `render` helper to render a template to a string immediately.
@@ -31,11 +33,11 @@ Use the `render` helper to render a template to a string immediately.
 
 output = render ->
   ul ->
-    li 'First Item'
-    li 'Second Item'
+    li 'Bergamont'
+    li 'Chamomile'
 
 console.log output
-# Outputs <ul><li>First Item</li><li>Second Item</li></ul>
+# Outputs <ul><li>Bergamont</li><li>Chamomile</li></ul>
 ```
 
 
