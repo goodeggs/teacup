@@ -21,7 +21,7 @@ elements =
  select small span strong sub summary sup table tbody td textarea tfoot
  th thead time title tr u ul video'
 
-  raw: 'script style' 
+  raw: 'script style'
 
   # Valid self-closing HTML 5 elements.
   void: 'area base br col command embed hr img input keygen link meta param
@@ -42,11 +42,11 @@ merge_elements = (args...) ->
   result
 
 
-class Teacup 
+class Teacup
   constructor: ->
     @htmlOut = null
-    
-  resetBuffer: (html=null) -> 
+
+  resetBuffer: (html=null) ->
     previous = @htmlOut
     @htmlOut = html
     return previous
@@ -55,8 +55,6 @@ class Teacup
     previous = @resetBuffer('')
     try
       template(args...)
-    catch error
-      throw @cleanStack error
     finally
       result = @resetBuffer previous
     return result
@@ -64,19 +62,6 @@ class Teacup
   # alias render for coffeecup compatibility
   cede: (args...) -> @render(args...)
 
-  cleanStack: do ->
-    lineExpressions = [
-      '\\s*at Teacup\\.renderContents .*'
-      '\\s*at Teacup\\.tag .*'
-      '\\s*at Teacup.* \\[as (\\w+)\\].*'
-      '\\s*at Teacup\\.tags\\.bound.*$'
-    ]
-    tagExpression = new RegExp "^#{lineExpressions.join '\\n'}", 'mg'
-
-    (error) ->
-      error.stack = error.stack?.replace tagExpression, '    at Teacup.$1'
-      return error
-  
   renderable: (template) ->
     teacup = @
     return (args...) ->
@@ -84,36 +69,34 @@ class Teacup
         teacup.htmlOut = ''
         try
           template.apply @, args
-        catch error
-          throw teacup.cleanStack error
         finally
           result = teacup.resetBuffer()
         return result
       else
         template.apply @, args
 
-  renderAttr: (name, value) -> 
+  renderAttr: (name, value) ->
     if not value? or value is false
       return ''
 
     if name is 'data' and typeof value is 'object'
       return (@renderAttr "data-#{k}", v for k,v of value).join('')
-    
+
     if value is true
       value = name
 
     return " #{name}=#{@quote @escape value.toString()}"
 
   attrOrder: ['id', 'class']
-  renderAttrs: (obj) -> 
+  renderAttrs: (obj) ->
     result = ''
-    
+
     # render explicitly ordered attributes first
     for name in @attrOrder when name of obj
       result += @renderAttr name, obj[name]
       delete obj[name]
 
-    # then unordered attrs 
+    # then unordered attrs
     for name, value of obj
       result += @renderAttr name, value
 
@@ -128,7 +111,7 @@ class Teacup
       @text contents
 
   isSelector: (string) ->
-    string.length > 1 and string[0] in ['#', '.']  
+    string.length > 1 and string[0] in ['#', '.']
 
   parseSelector: (selector) ->
     id = null
@@ -140,7 +123,7 @@ class Teacup
         [klass, id] = token.split '#'
         classes.push token unless klass is ''
     return {id, classes}
-  
+
   normalizeArgs: (args) ->
     attrs = {}
     selector = null
@@ -159,7 +142,7 @@ class Teacup
             attrs = arg
           else
             contents = arg
-        else  
+        else
           contents = arg
 
     if selector?
@@ -264,7 +247,7 @@ if module?.exports
   module.exports.Teacup = Teacup
 else if typeof define is 'function' and define.amd
   define('teacup', [], -> new Teacup().tags())
-else 
+else
   window.teacup = new Teacup().tags()
   window.teacup.Teacup = Teacup
-  
+
