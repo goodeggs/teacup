@@ -264,7 +264,7 @@ module.exports = renderable ({events}) ->
 Just use the CoffeeScript compiler.  Uglify will make em real small.
 
 ```
-$ coffee -cl -o build src
+$ coffee -c -o build src
 ```
 
 FAQ
