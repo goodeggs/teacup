@@ -21,7 +21,7 @@ describe 'Attributes', ->
   describe 'null or undefined value', ->
     it 'is omitted', ->
       template = -> br foo: null, bar: undefined
-      expect(render template).to.equal '<br />'
+      expect(render template).to.equal '<br foo />'
 
   describe 'string value', ->
     it 'is used verbatim', ->
