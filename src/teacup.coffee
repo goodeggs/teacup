@@ -76,6 +76,9 @@ class Teacup
         template.apply @, args
 
   renderAttr: (name, value) ->
+    if value == null or value == undefined
+      return " #{name}"
+
     if not value? or value is false
       return ''
 
@@ -105,6 +108,8 @@ class Teacup
   renderContents: (contents) ->
     if not contents?
       return
+    else if Array.isArray(contents)
+      @renderContents(c) for c in contents
     else if typeof contents is 'function'
       contents.call @
     else
@@ -127,23 +132,23 @@ class Teacup
   normalizeArgs: (args) ->
     attrs = {}
     selector = null
-    contents = null
+    contents = []
     for arg, index in args when arg?
       switch typeof arg
         when 'string'
           if index is 0 and @isSelector(arg)
             selector = @parseSelector(arg)
           else
-            contents = arg
+            contents.push(arg)
         when 'function', 'number', 'boolean'
-          contents = arg
+          contents.push(arg)
         when 'object'
           if arg.constructor == Object
             attrs = arg
           else
-            contents = arg
+            contents.push(arg)
         else
-          contents = arg
+          contents.push(arg)
 
     if selector?
       {id, classes} = selector
@@ -166,7 +171,7 @@ class Teacup
 
   selfClosingTag: (tag, args...) ->
     {attrs, contents} = @normalizeArgs args
-    if contents
+    if contents.length
       throw new Error "Teacup: <#{tag}/> must not have content.  Attempted to nest #{contents}"
     @raw "<#{tag}#{@renderAttrs attrs} />"
 
