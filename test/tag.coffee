@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{renderable, p} = require '..'
+{renderable, p, div, script} = require '..'
 
 describe 'tag', ->
   it 'renders text verbatim', ->
@@ -15,3 +15,8 @@ describe 'tag', ->
 
   it "renders undefined as ''", ->
     expect(renderable(p) undefined).to.equal "<p></p>"
+
+  it 'renders empty tags', ->
+    template = renderable ->
+      script src: 'js/app.js'
+    expect(template()).to.equal('<script src="js/app.js"></script>')

@@ -76,7 +76,10 @@ class Teacup
         template.apply @, args
 
   renderAttr: (name, value) ->
-    if not value? or value is false
+    if not value?
+      return " #{name}"
+
+    if value is false
       return ''
 
     if name is 'data' and typeof value is 'object'
@@ -196,6 +199,7 @@ class Teacup
     @htmlOut += s? and @escape(s.toString()) or ''
 
   raw: (s) ->
+    return unless s?
     @htmlOut += s
 
   #
