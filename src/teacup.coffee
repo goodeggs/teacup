@@ -76,7 +76,7 @@ class Teacup
         template.apply @, args
 
   renderAttr: (name, value) ->
-    if value == null
+    if value == null or value == undefined
       return " #{name}"
 
     if not value? or value is false
