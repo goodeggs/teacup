@@ -20,10 +20,3 @@ describe 'tag', ->
     template = renderable ->
       script src: 'js/app.js'
     expect(template()).to.equal('<script src="js/app.js"></script>')
-
-  it 'renders multiple contents', ->
-    template = renderable ->
-      div 'foo', ->
-        div 'bar'
-      , 'boo'
-    expect(template()).to.equal('<div>foo<div>bar</div>boo</div>')
