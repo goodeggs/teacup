@@ -201,7 +201,6 @@ class Teacup
     @htmlOut += s? and @escape(s.toString()) or ''
 
   raw: (s) ->
-    return unless s?
     @htmlOut += s
 
   #
