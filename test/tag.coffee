@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{renderable, p, div, script} = require '..'
+{renderable, p, div, script, ngChange, ngForm, ngInclude, ngPluralize} = require '..'
 
 describe 'tag', ->
   it 'renders text verbatim', ->
@@ -27,3 +27,11 @@ describe 'tag', ->
         div 'bar'
       , 'boo'
     expect(template()).to.equal('<div>foo<div>bar</div>boo</div>')
+
+  it 'renders angular tags', ->
+    template = renderable ->
+      ngChange 'foo'
+      ngForm 'bar'
+      ngInclude 'kaa'
+      ngPluralize 'taa'
+    expect(template()).to.equal('<ng-change>foo</ng-change><ng-form>bar</ng-form><ng-include>kaa</ng-include><ng-pluralize>taa</ng-pluralize>')

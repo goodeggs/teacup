@@ -19,7 +19,7 @@ elements =
  html i iframe ins kbd label legend li map mark menu meter nav noscript object
  ol optgroup option output p pre progress q rp rt ruby s samp section
  select small span strong sub summary sup table tbody td textarea tfoot
- th thead time title tr u ul video'
+ th thead time title tr u ul video ngChange ngForm ngInclude ngPluralize'
 
   raw: 'script style'
 
@@ -41,6 +41,7 @@ merge_elements = (args...) ->
       result.push element unless element in result
   result
 
+hyphens = (s) -> s.replace(/([a-z\d])([A-Z])/, '$1-$2').toLowerCase()
 
 class Teacup
   constructor: ->
@@ -76,6 +77,7 @@ class Teacup
         template.apply @, args
 
   renderAttr: (name, value) ->
+    name = hyphens(name)
     if not value?
       return " #{name}"
 
@@ -158,22 +160,25 @@ class Teacup
     return {attrs, contents}
 
   tag: (tagName, args...) ->
+    tagName = hyphens(tagName)
     {attrs, contents} = @normalizeArgs args
     @raw "<#{tagName}#{@renderAttrs attrs}>"
     @renderContents contents
     @raw "</#{tagName}>"
 
   rawTag: (tagName, args...) ->
+    tagName = hyphens(tagName)
     {attrs, contents} = @normalizeArgs args
     @raw "<#{tagName}#{@renderAttrs attrs}>"
     @raw contents
     @raw "</#{tagName}>"
 
-  selfClosingTag: (tag, args...) ->
+  selfClosingTag: (tagName, args...) ->
+    tagName = hyphens(tagName)
     {attrs, contents} = @normalizeArgs args
     if contents.length
-      throw new Error "Teacup: <#{tag}/> must not have content.  Attempted to nest #{contents}"
-    @raw "<#{tag}#{@renderAttrs attrs} />"
+      throw new Error "Teacup: <#{tagName}/> must not have content.  Attempted to nest #{contents}"
+    @raw "<#{tagName}#{@renderAttrs attrs} />"
 
   coffeescript: (fn) ->
     @raw """<script type="text/javascript">(function() {

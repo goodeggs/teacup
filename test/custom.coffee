@@ -14,3 +14,6 @@ describe 'custom tag', ->
   it 'should render with attributes and content', ->
     template = -> tag 'custom', foo: 'bar', ping: 'pong', 'zag'
     expect(render template).to.equal '<custom foo="bar" ping="pong">zag</custom>'
+  it 'should render tag to hyphens', ->
+    template = -> tag 'ngInclude', src: 'foo.html'
+    expect(render template).to.equal '<ng-include src="foo.html"></ng-include>'
