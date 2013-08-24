@@ -25,7 +25,9 @@
     "coffee-script": "*",
     "connect-assets": "*",
     "mocha": "*",
-    "expect.js": "*"
+    "expect.js": "*",
+    "gaze": "~0.3.4",
+    "uglify-js": "*"
   },
   "scripts": {
     "pretest": "./node_modules/.bin/coffee -c -o lib src",

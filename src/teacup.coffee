@@ -19,7 +19,7 @@ elements =
  html i iframe ins kbd label legend li map mark menu meter nav noscript object
  ol optgroup option output p pre progress q rp rt ruby s samp section
  select small span strong sub summary sup table tbody td textarea tfoot
- th thead time title tr u ul video ngChange ngForm ngInclude ngPluralize'
+ th thead time title tr u ul video ngChange ngForm ngInclude ngPluralize ngView'
 
   raw: 'script style'
 
@@ -31,10 +31,10 @@ elements =
  nextid noembed plaintext rb strike xmp big blink center font marquee multicol
  nobr spacer tt'
 
-  obsolete_void: 'basefont frame'
+  obsoleteVoid: 'basefont frame'
 
 # Create a unique list of element names merging the desired groups.
-merge_elements = (args...) ->
+mergeElements = (args...) ->
   result = []
   for a in args
     for element in elements[a].split ' '
@@ -45,38 +45,38 @@ hyphens = (s) -> s.replace(/([a-z\d])([A-Z])/, '$1-$2').toLowerCase()
 
 class Teacup
   constructor: ->
-    @htmlOut = null
+    @_htmlOut = null
 
-  resetBuffer: (html=null) ->
-    previous = @htmlOut
-    @htmlOut = html
+  _resetBuffer: (html=null) ->
+    previous = @_htmlOut
+    @_htmlOut = html
     return previous
 
   render: (template, args...) ->
-    previous = @resetBuffer('')
+    previous = @_resetBuffer('')
     try
       template(args...)
     finally
-      result = @resetBuffer previous
+      result = @_resetBuffer previous
     return result
 
   # alias render for coffeecup compatibility
   cede: (args...) -> @render(args...)
 
   renderable: (template) ->
-    teacup = @
+    self = @
     return (args...) ->
-      if teacup.htmlOut is null
-        teacup.htmlOut = ''
+      if self._htmlOut is null
+        self._htmlOut = ''
         try
           template.apply @, args
         finally
-          result = teacup.resetBuffer()
+          result = self._resetBuffer()
         return result
       else
         template.apply @, args
 
-  renderAttr: (name, value) ->
+  _renderAttr: (name, value) ->
     name = hyphens(name)
     if not value?
       return " #{name}"
@@ -85,42 +85,42 @@ class Teacup
       return ''
 
     if name is 'data' and typeof value is 'object'
-      return (@renderAttr "data-#{k}", v for k,v of value).join('')
+      return (@_renderAttr "data-#{k}", v for k,v of value).join('')
 
     if value is true
       value = name
 
     return " #{name}=#{@quote @escape value.toString()}"
 
-  attrOrder: ['id', 'class']
-  renderAttrs: (obj) ->
+  _attrOrder: ['id', 'class']
+  _renderAttrs: (obj) ->
     result = ''
 
     # render explicitly ordered attributes first
-    for name in @attrOrder when name of obj
-      result += @renderAttr name, obj[name]
+    for name in @_attrOrder when name of obj
+      result += @_renderAttr name, obj[name]
       delete obj[name]
 
     # then unordered attrs
     for name, value of obj
-      result += @renderAttr name, value
+      result += @_renderAttr name, value
 
     return result
 
-  renderContents: (contents) ->
+  _renderContents: (contents) ->
     if not contents?
       return
     else if Array.isArray(contents)
-      @renderContents(c) for c in contents
+      @_renderContents(c) for c in contents
     else if typeof contents is 'function'
       contents.call @
     else
       @text contents
 
-  isSelector: (string) ->
+  _isSelector: (string) ->
     string.length > 1 and string[0] in ['#', '.']
 
-  parseSelector: (selector) ->
+  _parseSelector: (selector) ->
     id = null
     classes = []
     for token in selector.split '.'
@@ -131,15 +131,15 @@ class Teacup
         classes.push token unless klass is ''
     return {id, classes}
 
-  normalizeArgs: (args) ->
+  _normalizeArgs: (args) ->
     attrs = {}
     selector = null
     contents = []
     for arg, index in args when arg?
       switch typeof arg
         when 'string'
-          if index is 0 and @isSelector(arg)
-            selector = @parseSelector(arg)
+          if index is 0 and @_isSelector(arg)
+            selector = @_parseSelector(arg)
           else
             contents.push(arg)
         when 'function', 'number', 'boolean'
@@ -161,24 +161,24 @@ class Teacup
 
   tag: (tagName, args...) ->
     tagName = hyphens(tagName)
-    {attrs, contents} = @normalizeArgs args
-    @raw "<#{tagName}#{@renderAttrs attrs}>"
-    @renderContents contents
+    {attrs, contents} = @_normalizeArgs args
+    @raw "<#{tagName}#{@_renderAttrs attrs}>"
+    @_renderContents contents
     @raw "</#{tagName}>"
 
   rawTag: (tagName, args...) ->
     tagName = hyphens(tagName)
-    {attrs, contents} = @normalizeArgs args
-    @raw "<#{tagName}#{@renderAttrs attrs}>"
+    {attrs, contents} = @_normalizeArgs args
+    @raw "<#{tagName}#{@_renderAttrs attrs}>"
     @raw contents
     @raw "</#{tagName}>"
 
   selfClosingTag: (tagName, args...) ->
     tagName = hyphens(tagName)
-    {attrs, contents} = @normalizeArgs args
+    {attrs, contents} = @_normalizeArgs args
     if contents.length
       throw new Error "Teacup: <#{tagName}/> must not have content.  Attempted to nest #{contents}"
-    @raw "<#{tagName}#{@renderAttrs attrs} />"
+    @raw "<#{tagName}#{@_renderAttrs attrs} />"
 
   coffeescript: (fn) ->
     @raw """<script type="text/javascript">(function() {
@@ -197,16 +197,16 @@ class Teacup
 
   ie: (condition, contents) ->
     @raw "<!--[if #{@escape condition}]>"
-    @renderContents contents
+    @_renderContents contents
     @raw "<![endif]-->"
 
   text: (s) ->
-    unless @htmlOut?
+    unless @_htmlOut?
       throw new Error("Teacup: can't call a tag function outside a rendering context")
-    @htmlOut += s? and @escape(s.toString()) or ''
+    @_htmlOut += s? and @escape(s.toString()) or ''
 
   raw: (s) ->
-    @htmlOut += s
+    @_htmlOut += s
 
   #
   # Filters
@@ -223,41 +223,39 @@ class Teacup
   quote: (value) ->
     "\"#{value}\""
 
-  #
-  # Binding
-  #
-  tags: ->
-    bound = {}
+# Binding
 
-    boundMethodNames = [].concat(
-      'cede coffeescript comment doctype escape ie raw render renderable script tag text'.split(' ')
-      merge_elements 'regular', 'obsolete', 'raw', 'void', 'obsolete_void'
-    )
-    for method in boundMethodNames
-      do (method) =>
-        bound[method] = (args...) => @[method].apply @, args
+teacup = new Teacup
+bound = {}
+bind = (tags, refer) ->
+  for tag in tags
+    do (tag, refer) ->
+      Teacup::[tag] = (args...) ->
+        args.unshift(tag)
+        teacup[refer] args...
+      bound[tag] = (args...) ->
+        teacup[tag] args...
+  bound
+bound.bind = bind
+for key of teacup
+  do (key) ->
+    if key.indexOf('_') != 0
+      bound[key] = (args...) ->
+        teacup[key] args...
+elems =
+  tag: mergeElements 'regular', 'obsolete'
+  rawTag: mergeElements 'raw'
+  selfClosingTag: mergeElements 'void', 'obsoleteVoid'
+for refer of elems
+  bind(elems[refer], refer)
 
-    return bound
-
-# Define tag functions on the prototype for pretty stack traces
-for tagName in merge_elements 'regular', 'obsolete'
-  do (tagName) ->
-    Teacup::[tagName] = (args...) -> @tag tagName, args...
-
-for tagName in merge_elements 'raw'
-  do (tagName) ->
-    Teacup::[tagName] = (args...) -> @rawTag tagName, args...
-
-for tagName in merge_elements 'void', 'obsolete_void'
-  do (tagName) ->
-    Teacup::[tagName] = (args...) -> @selfClosingTag tagName, args...
+# Exports
 
 if module?.exports
-  module.exports = new Teacup().tags()
+  module.exports = bound
   module.exports.Teacup = Teacup
 else if typeof define is 'function' and define.amd
-  define('teacup', [], -> new Teacup().tags())
+  define('teacup', [], bound)
 else
-  window.teacup = new Teacup().tags()
+  window.teacup = bound
   window.teacup.Teacup = Teacup
-
