@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, a, br} = require '..'
+{render, a, br, div} = require '..'
 
 describe 'Attributes', ->
 
@@ -42,3 +42,8 @@ describe 'Attributes', ->
     it 'expands attributes', ->
       template = -> br data: { name: 'Name', value: 'Value' }
       expect(render template).to.equal '<br data-name="Name" data-value="Value" />'
+
+  describe 'camelCase to hyphens', ->
+    it 'convert to hyphens', ->
+      template = -> div ngShow: 'value', fooBar: null, foo2Bar: undefined, dataFooBar:'boo'
+      expect(render template).to.equal '<div ng-show="value" foo-bar foo2-bar data-foo-bar="boo"></div>'
