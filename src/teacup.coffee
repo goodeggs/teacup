@@ -41,7 +41,7 @@ mergeElements = (args...) ->
       result.push element unless element in result
   result
 
-hyphens = (s) -> s.replace(/([a-z\d])([A-Z])/, '$1-$2').toLowerCase()
+hyphens = (s) -> s.replace(/([a-z\d])([A-Z])/g, '$1-$2').toLowerCase()
 
 class Teacup
   constructor: ->

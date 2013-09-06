@@ -45,5 +45,5 @@ describe 'Attributes', ->
 
   describe 'camelCase to hyphens', ->
     it 'convert to hyphens', ->
-      template = -> div ngShow: 'value', fooBar: null, foo2Bar: undefined
-      expect(render template).to.equal '<div ng-show="value" foo-bar foo2-bar></div>'
+      template = -> div ngShow: 'value', fooBar: null, foo2Bar: undefined, dataFooBar:'boo'
+      expect(render template).to.equal '<div ng-show="value" foo-bar foo2-bar data-foo-bar="boo"></div>'
