@@ -46,6 +46,6 @@ describe 'Attributes', ->
   describe 'nested hyphenated attribute', ->
     it 'renders', ->
       template = ->
-        div 'proxy-on-click': "alert('hi')", ->
-          div '#inner'
-      expect(render template).to.equal '<div proxy-on-click="alert(\'hi\')"><div id="inner"></div></div>'
+        div 'on-x': 'beep', ->
+          div 'on-y': 'boop'
+      expect(render template).to.equal '<div on-x="beep"><div on-y="boop"></div></div>'
