@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, a, br} = require '..'
+{render, a, br, div} = require '..'
 
 describe 'Attributes', ->
 
@@ -42,3 +42,10 @@ describe 'Attributes', ->
     it 'expands attributes', ->
       template = -> br data: { name: 'Name', value: 'Value' }
       expect(render template).to.equal '<br data-name="Name" data-value="Value" />'
+
+  describe 'nested hyphenated attribute', ->
+    it 'renders', ->
+      template = ->
+        div 'proxy-on-click': "alert('hi')", ->
+          div '#inner'
+      expect(render template).to.equal '<div proxy-on-click="alert(\'hi\')"><div id="inner"></div></div>'
