@@ -259,6 +259,17 @@ module.exports = renderable ({events}) ->
         hcalendar event
 ```
 
+You can write helpers that support css selector classnames and ids using `normalizeArgs`:
+
+```coffee
+{normalizeArgs, input} = require 'teacup'
+
+textInput = ->
+  {attrs, contents} = normalizeArgs arguments
+  attrs.type = 'text'
+  input attrs, contents
+```
+
 ### Compiling Templates
 
 Just use the CoffeeScript compiler.  Uglify will make em real small.

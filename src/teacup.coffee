@@ -224,7 +224,7 @@ class Teacup
     bound = {}
 
     boundMethodNames = [].concat(
-      'cede coffeescript comment doctype escape ie raw render renderable script tag text'.split(' ')
+      'cede coffeescript comment doctype escape ie normalizeArgs raw render renderable script tag text'.split(' ')
       merge_elements 'regular', 'obsolete', 'raw', 'void', 'obsolete_void'
     )
     for method in boundMethodNames
