@@ -12,10 +12,16 @@ describe 'CSS Selectors', ->
       template = -> div '.myclass', 'foo'
       expect(render template).to.equal '<div class="myclass">foo</div>'
 
+    describe 'and a class attribute', ->
+      it 'prepends the selector class', ->
+        template = -> div '.myclass', 'class': 'myattrclass', 'foo'
+        expect(render template).to.equal '<div class="myclass myattrclass">foo</div>'
+
   describe 'multi-class selector', ->
     it 'adds all the classes', ->
       template = -> div '.myclass.myclass2.myclass3', 'foo'
       expect(render template).to.equal '<div class="myclass myclass2 myclass3">foo</div>'
+
 
   describe 'wihout contents', ->
     it 'still adds attributes', ->
