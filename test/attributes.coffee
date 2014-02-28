@@ -19,7 +19,7 @@ describe 'Attributes', ->
       expect(render template).to.equal '<br />'
 
   describe 'null and undefined value', ->
-    it 'is omitted', ->
+    it 'renders just the attribute name', ->
       template = -> br foo: null, bar: undefined
       expect(render template).to.equal '<br foo bar />'
 
