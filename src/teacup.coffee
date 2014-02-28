@@ -151,7 +151,10 @@ class Teacup
     if selector?
       {id, classes} = selector
       attrs.id = id if id?
-      attrs.class = classes.join(' ') if classes?.length
+      if classes?.length
+        if attrs.class
+          classes.push attrs.class
+        attrs.class = classes.join(' ')
 
     return {attrs, contents}
 
