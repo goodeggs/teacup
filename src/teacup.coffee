@@ -109,7 +109,8 @@ class Teacup
     if not contents?
       return
     else if typeof contents is 'function'
-      contents.call @
+      result = contents.call @
+      @text result if typeof result is 'string'
     else
       @text contents
 
@@ -204,6 +205,7 @@ class Teacup
   raw: (s) ->
     return unless s?
     @htmlOut += s
+    null
 
   #
   # Filters
