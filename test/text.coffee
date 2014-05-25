@@ -16,3 +16,5 @@ describe 'text', ->
     expect(render template).to.equal '<h1 class="title">hello world</h1>'
     template = -> h1 class: 'title', -> 'hello world'
     expect(render template).to.equal '<h1 class="title">hello world</h1>'
+    template = -> h1 '.title', -> text 'hello world'
+    expect(render template).to.equal '<h1 class="title">hello world</h1>'
