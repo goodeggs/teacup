@@ -115,7 +115,7 @@ class Teacup
       @text contents
 
   isSelector: (string) ->
-    string.length > 1 and string.charAt(0) in ['#', '.']
+    string.charAt(0) in ['#', '.']
 
   parseSelector: (selector) ->
     id = null
