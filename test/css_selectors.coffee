@@ -7,6 +7,10 @@ describe 'CSS Selectors', ->
       template = -> div '#myid', 'foo'
       expect(render template).to.equal '<div id="myid">foo</div>'
 
+    it 'must be greater than length 1', ->
+      template = -> div '#'
+      expect(render template).to.equal '<div>#</div>'
+
   describe 'one class selector', ->
     it 'adds an html class', ->
       template = -> div '.myclass', 'foo'
@@ -22,8 +26,8 @@ describe 'CSS Selectors', ->
       template = -> div '.myclass.myclass2.myclass3', 'foo'
       expect(render template).to.equal '<div class="myclass myclass2 myclass3">foo</div>'
 
-
-  describe 'wihout contents', ->
+  describe 'without contents', ->
     it 'still adds attributes', ->
       template = -> img '#myid.myclass', src: '/pic.png'
       expect(render template).to.equal '<img id="myid" class="myclass" src="/pic.png" />'
+
