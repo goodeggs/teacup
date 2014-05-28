@@ -109,7 +109,8 @@ class Teacup
     if not contents?
       return
     else if typeof contents is 'function'
-      contents.call @
+      result = contents.call @
+      @text result if typeof result is 'string'
     else
       @text contents
 
@@ -200,10 +201,12 @@ class Teacup
     unless @htmlOut?
       throw new Error("Teacup: can't call a tag function outside a rendering context")
     @htmlOut += s? and @escape(s.toString()) or ''
+    null
 
   raw: (s) ->
     return unless s?
     @htmlOut += s
+    null
 
   #
   # Filters
