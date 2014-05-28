@@ -6,7 +6,7 @@ Compose DSL functions to build strings of HTML.
 Package templates and helpers in CommonJS, AMD modules, or vanilla coffeescript.
 Integrate with the tools you love: Express, Backbone, Rails, and more.
 
-[![Build Status](https://travis-ci.org/goodeggs/teacup.png)](https://travis-ci.org/goodeggs/teacup)
+[![Build Status](https://travis-ci.org/goodeggs/teacup.png?branch=master)](https://travis-ci.org/goodeggs/teacup)
 [![NPM version](https://badge.fury.io/js/teacup.png)](http://badge.fury.io/js/teacup)
 
 The Basics
