@@ -303,3 +303,6 @@ $ git clone https://github.com/goodeggs/teacup && cd teacup
 $ npm install
 $ npm test
 ```
+
+[Changelog](https://github.com/goodeggs/teacup/commits/master)
+---------
