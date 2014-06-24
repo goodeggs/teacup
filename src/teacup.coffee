@@ -255,9 +255,11 @@ for tagName in merge_elements 'void', 'obsolete_void'
 if module?.exports
   module.exports = new Teacup().tags()
   module.exports.Teacup = Teacup
+  module.exports.version = '0.4.1'
 else if typeof define is 'function' and define.amd
   define('teacup', [], -> new Teacup().tags())
 else
   window.teacup = new Teacup().tags()
   window.teacup.Teacup = Teacup
+  window.teacup.version = '0.4.1'
 
