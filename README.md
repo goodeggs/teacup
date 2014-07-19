@@ -238,6 +238,20 @@ console.log render ->
 # Outputs <p>Sometimes you just want <b>plain</b> text.</p>
 ```
 
+### Custom Tags
+
+You can define custom tags with the tag helper.
+
+```coffee
+{tag} = require 'teacup'
+
+console.log render ->
+  tag 'chart',
+    value: '5'
+    style: 'colored'
+# Outputs <chart value="5" style="colored"></chart>
+```
+
 ### Helpers
 
 Write view helpers as renderable functions and require them as needed.
