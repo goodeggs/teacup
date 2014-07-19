@@ -85,6 +85,8 @@ class Teacup
     if name is 'data' and typeof value is 'object'
       return (@renderAttr "data-#{k}", v for k,v of value).join('')
 
+    name = name.replace /([A-Z])/g, ($1) -> "-#{$1.toLowerCase()}"
+
     if value is true
       value = name
 
@@ -260,4 +262,3 @@ else if typeof define is 'function' and define.amd
 else
   window.teacup = new Teacup().tags()
   window.teacup.Teacup = Teacup
-

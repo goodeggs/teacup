@@ -190,6 +190,19 @@ console.log render ->
 # Outputs <button class="btn" type="button" disabled="disabled">Click Me</button>
 ```
 
+If you use camelCase attributes, they render as kebab-case.
+
+```coffee
+{render, button} = require 'teacup'
+
+console.log render ->
+  button
+    ngClick: 'executeCallback()',
+    myCustomDirective: 'data',
+    'Click Me'
+# Outputs <button ng-click="executeCallback()" my-custom-directive="data">Click Me</button>
+```
+
 ### Escaping
 
 Teacup escapes input by default. To disable escaping, use the `raw` helper.

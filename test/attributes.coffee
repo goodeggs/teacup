@@ -49,3 +49,12 @@ describe 'Attributes', ->
         div 'on-x': 'beep', ->
           div 'on-y': 'boop'
       expect(render template).to.equal '<div on-x="beep"><div on-y="boop"></div></div>'
+
+  describe 'camelCase attribute', ->
+    it 'converts to kebob case', ->
+      template = ->
+        div
+          myAttribute: 'beep'
+          myLongerAttribute: 'boop'
+          MyStrangeAttribute: 'bloop'
+      expect(render template).to.equal '<div my-attribute="beep" my-longer-attribute="boop" -my-strange-attribute="bloop"></div>'
