@@ -243,7 +243,7 @@ console.log render ->
 You can define custom tags with the tag helper.
 
 ```coffee
-{tag} = require 'teacup'
+{render, tag} = require 'teacup'
 
 console.log render ->
   tag 'chart',
