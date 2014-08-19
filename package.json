@@ -30,7 +30,7 @@
     "uglify-js": "*"
   },
   "scripts": {
-    "pretest": "./node_modules/.bin/coffee -mco lib src",
+    "pretest": "./scripts/pretest.sh",
     "test": "./node_modules/.bin/mocha --compilers coffee:coffee-script/register"
   }
 }
