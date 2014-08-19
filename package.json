@@ -26,11 +26,11 @@
     "connect-assets": "*",
     "mocha": "*",
     "expect.js": "*",
-    "gaze": "~0.3.4",
+    "gaze": "*",
     "uglify-js": "*"
   },
   "scripts": {
-    "pretest": "./node_modules/.bin/coffee -c -o lib src",
-    "test": "./node_modules/.bin/mocha"
+    "pretest": "./node_modules/.bin/coffee -mco lib src",
+    "test": "./node_modules/.bin/mocha --compilers coffee:coffee-script/register"
   }
 }
