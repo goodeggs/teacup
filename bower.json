@@ -1,0 +1,28 @@
+{
+  "name": "teacup",
+  "version": "0.4.2",
+  "main": ["lib/teacup.js"],
+  "ignore": [
+    "src",
+    "test",
+    "docs",
+    "lib/connect-assets.js",
+    "lib/express.js",
+    ".gitignore",
+    ".npmignore",
+    "travis.yml"
+  ],
+  "keywords": [
+    "template",
+    "coffeescript",
+    "coffee-script",
+    "coffee",
+    "render",
+    "view",
+    "html",
+    "coffeekup",
+    "coffeecup",
+    "drykup",
+    "express"
+  ]
+}
