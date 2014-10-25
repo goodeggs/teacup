@@ -10,7 +10,7 @@
     "lib/express.js",
     ".gitignore",
     ".npmignore",
-    "travis.yml"
+    ".travis.yml"
   ],
   "keywords": [
     "template",
