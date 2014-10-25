@@ -1,4 +1,4 @@
-CoffeeScript = require 'coffee-script' # We need require support for .coffee files
+CoffeeScript = require 'coffee-script/register' # We need require support for .coffee files
 
 module.exports =
   renderFile: (path, options, callback) ->

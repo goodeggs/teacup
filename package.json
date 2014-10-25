@@ -28,7 +28,9 @@
     "expect.js": "*"
   },
   "scripts": {
-    "pretest": "./node_modules/.bin/coffee -c -o lib src",
-    "test": "./node_modules/.bin/mocha"
+    "pretest": "npm run compile",
+    "prepublish": "npm run compile",
+    "test": "mocha",
+    "compile": "coffee --compile --output lib/ src/"
   }
 }
