@@ -26,6 +26,11 @@ describe 'CSS Selectors', ->
       template = -> div '.myclass.myclass2.myclass3', 'foo'
       expect(render template).to.equal '<div class="myclass myclass2 myclass3">foo</div>'
 
+  describe 'with an id and classes, separated by spaces', ->
+    it 'adds ids and classes with minimal whitespace', ->
+      template = -> div '#myid .myclass1 .myclass2 '
+      expect(render template).to.equal '<div id="myid" class="myclass1 myclass2"></div>'
+
   describe 'without contents', ->
     it 'still adds attributes', ->
       template = -> img '#myid.myclass', src: '/pic.png'

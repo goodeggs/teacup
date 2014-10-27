@@ -123,6 +123,7 @@ class Teacup
     id = null
     classes = []
     for token in selector.split '.'
+      token = token.trim()
       if id
         classes.push token
       else
