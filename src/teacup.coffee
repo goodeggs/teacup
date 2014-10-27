@@ -227,13 +227,19 @@ class Teacup
     "\"#{value}\""
 
   #
+  # Plugins
+  #
+  use: (plugin) ->
+    plugin @
+
+  #
   # Binding
   #
   tags: ->
     bound = {}
 
     boundMethodNames = [].concat(
-      'cede coffeescript comment doctype escape ie normalizeArgs raw render renderable script tag text'.split(' ')
+      'cede coffeescript comment doctype escape ie normalizeArgs raw render renderable script tag text use'.split(' ')
       merge_elements 'regular', 'obsolete', 'raw', 'void', 'obsolete_void'
     )
     for method in boundMethodNames

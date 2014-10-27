@@ -307,6 +307,21 @@ Just use the CoffeeScript compiler.  Uglify will make em real small.
 $ coffee -c -o build src
 ```
 
+### Plugins
+
+
+  Use plugins with the `use` method:
+
+  ```coffee
+  teacup = require 'teacup'
+  camelToKebab = require 'teacup-camel-to-kebab'
+
+  teacup.use camelToKebab()
+  ```
+
+#### Available Plugins
+  - [camel-to-kebab](https://github.com/goodeggs/teacup-camel-to-kebab) - transform camelCase attribute names to kebab-case
+
 FAQ
 ----
 
