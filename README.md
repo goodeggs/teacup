@@ -334,5 +334,5 @@ $ npm install
 $ npm test
 ```
 
-[Changelog](https://github.com/goodeggs/teacup/commits/master)
+[Changelog](CHANGELOG.md)
 ---------
