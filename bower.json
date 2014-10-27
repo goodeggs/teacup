@@ -1,7 +1,9 @@
 {
   "name": "teacup",
-  "version": "0.4.2",
-  "main": ["lib/teacup.js"],
+  "version": "1.0.0",
+  "main": [
+    "lib/teacup.js"
+  ],
   "ignore": [
     "src",
     "test",
