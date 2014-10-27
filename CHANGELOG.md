@@ -1,4 +1,4 @@
-**v1.0.0**
+**v1.0.0** (2014-10-26)
 
  - Not a particularly significant release.  Bumped to 1.0 at [isaacs recommendation](https://github.com/npm/init-package-json/commit/363a17bc31bf653bb9575105eea62fb4664ad04b)
  - Add CHANGELOG.md
