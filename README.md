@@ -308,6 +308,7 @@ $ coffee -c -o build src
 
 #### Available Plugins
   - [camel-to-kebab](https://github.com/goodeggs/teacup-camel-to-kebab) - transform camelCase attribute names to kebab-case
+  - [databind](https://github.com/shimaore/teacup-databind) - simplify defining KnockoutJS attributes
 
 FAQ
 ----
