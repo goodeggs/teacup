@@ -32,5 +32,10 @@
     "prepublish": "npm run compile",
     "test": "mocha",
     "compile": "coffee --compile --output lib/ src/"
+  },
+  "dependencies": {
+    "coffee-script": "^1.9.0",
+    "connect-assets": "^4.6.0",
+    "expect.js": "^0.3.1"
   }
 }
