@@ -97,10 +97,10 @@ class Teacup
     # render explicitly ordered attributes first
     for name in @attrOrder when name of obj
       result += @renderAttr name, obj[name]
-      delete obj[name]
 
     # then unordered attrs
     for name, value of obj
+      continue if name in @attrOrder
       result += @renderAttr name, value
 
     return result

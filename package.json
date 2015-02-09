@@ -22,7 +22,7 @@
     "express"
   ],
   "devDependencies": {
-    "coffee-script": ">=1.7.0",
+    "coffee-script": ">=1.8.0",
     "connect-assets": "*",
     "mocha": "*",
     "expect.js": "*"
