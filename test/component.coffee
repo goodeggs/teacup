@@ -5,8 +5,8 @@ console.log {component, div, render}
 describe 'Component', ->
 
   it 'takes arguments', ->
-    caption = component (caption) ->
-      div '.caption', caption
+    caption = component ({text}) ->
+      div '.caption', text
 
-    template = -> caption "Hello"
+    template = -> caption text: "Hello"
     expect(render template).to.equal '<div class="caption">Hello</div>'
