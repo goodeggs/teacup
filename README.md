@@ -306,6 +306,35 @@ $ coffee -c -o build src
   teacup.use camelToKebab()
   ```
 
+### Components
+
+Create your own teacup tag-like components:
+
+```coffee
+caption = component (selector, attrs, renderContents) ->
+  div "#{selector}.caption", renderContents
+
+caption '.photo-caption' -> text "A bird"
+
+# Outputs <div class="photo-caption caption">A bird</div>
+```
+Components can also pass data along to their children:
+
+```coffee
+modal = component (selector, attrs, renderContents) ->
+  closeButton = ->
+    button 'Close'
+
+  div '.modal', ->
+    renderContents(closeButton)
+
+modal (closeButton) ->
+  text 'close me: '
+  closeButton()
+
+# Outputs <div class="modal">close me: <button>Close</button></div>
+```
+
 #### Available Plugins
   - [camel-to-kebab](https://github.com/goodeggs/teacup-camel-to-kebab) - transform camelCase attribute names to kebab-case
   - [databind](https://github.com/shimaore/teacup-databind) - simplify defining KnockoutJS attributes
