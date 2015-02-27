@@ -250,8 +250,8 @@ class Teacup
 
   component: (func) ->
     (args...) =>
-      {selector, attrs} = @normalizeArgs(args)
-      func.apply @, [selector, attrs]
+      {selector, attrs, contents} = @normalizeArgs(args)
+      func.apply @, [selector, attrs, => @renderContents contents]
 
 # Define tag functions on the prototype for pretty stack traces
 for tagName in merge_elements 'regular', 'obsolete'

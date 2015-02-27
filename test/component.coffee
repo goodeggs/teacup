@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{component, div, render} = require '..'
+{component, div, render, img} = require '..'
 
 console.log {component, div, render}
 describe 'Component', ->
@@ -17,3 +17,15 @@ describe 'Component', ->
 
     template = -> spinner '.full-screen'
     expect(render template).to.equal '<div class="full-screen spinner"></div>'
+
+  it 'passes along child content', ->
+    captioned = component (selector, {text}, renderContents) ->
+      div '.captioned', ->
+        renderContents()
+        div '.caption', text
+
+    template = ->
+      captioned text: 'La Dura Dura', ->
+        img src: '/catalonia/IMG_00182.JPG'
+
+    expect(render template).to.equal '<div class="captioned"><img src="/catalonia/IMG_00182.JPG" /><div class="caption">La Dura Dura</div></div>'
