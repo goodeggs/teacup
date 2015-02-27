@@ -138,7 +138,8 @@ class Teacup
       switch typeof arg
         when 'string'
           if index is 0 and @isSelector(arg)
-            selector = @parseSelector(arg)
+            selector = arg
+            parsedSelector = @parseSelector(arg)
           else
             contents = arg
         when 'function', 'number', 'boolean'
@@ -151,15 +152,15 @@ class Teacup
         else
           contents = arg
 
-    if selector?
-      {id, classes} = selector
+    if parsedSelector?
+      {id, classes} = parsedSelector
       attrs.id = id if id?
       if classes?.length
         if attrs.class
           classes.push attrs.class
         attrs.class = classes.join(' ')
 
-    return {attrs, contents}
+    return {attrs, contents, selector}
 
   tag: (tagName, args...) ->
     {attrs, contents} = @normalizeArgs args
@@ -248,8 +249,9 @@ class Teacup
     return bound
 
   component: (func) ->
-    (args...) ->
-      func.apply(@, args)
+    (args...) =>
+      {selector, attrs} = @normalizeArgs(args)
+      func.apply @, [selector, attrs]
 
 # Define tag functions on the prototype for pretty stack traces
 for tagName in merge_elements 'regular', 'obsolete'
