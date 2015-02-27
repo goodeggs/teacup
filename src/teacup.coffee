@@ -105,11 +105,11 @@ class Teacup
 
     return result
 
-  renderContents: (contents) ->
+  renderContents: (contents, rest...) ->
     if not contents?
       return
     else if typeof contents is 'function'
-      result = contents.call @
+      result = contents.apply @, rest
       @text result if typeof result is 'string'
     else
       @text contents
@@ -251,7 +251,10 @@ class Teacup
   component: (func) ->
     (args...) =>
       {selector, attrs, contents} = @normalizeArgs(args)
-      func.apply @, [selector, attrs, => @renderContents contents]
+      renderContents = (args...) =>
+        args.unshift contents
+        @renderContents.apply @, args
+      func.apply @, [selector, attrs, renderContents]
 
 # Define tag functions on the prototype for pretty stack traces
 for tagName in merge_elements 'regular', 'obsolete'

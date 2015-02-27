@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{component, div, render, img} = require '..'
+{component, div, render, img, text, button} = require '..'
 
 console.log {component, div, render}
 describe 'Component', ->
@@ -29,3 +29,18 @@ describe 'Component', ->
         img src: '/catalonia/IMG_00182.JPG'
 
     expect(render template).to.equal '<div class="captioned"><img src="/catalonia/IMG_00182.JPG" /><div class="caption">La Dura Dura</div></div>'
+
+  it 'lets components provide give contents to their children', ->
+    modal = component (selector, attrs, renderContents) ->
+      closeButton = ->
+        button 'Close'
+
+      div '.modal', ->
+        renderContents(closeButton)
+
+    template = ->
+      modal (closeButton) ->
+        text 'close me: '
+        closeButton()
+
+    expect(render template).to.equal '<div class="modal">close me: <button>Close</button></div>'
