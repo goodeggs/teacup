@@ -1,7 +1,6 @@
 expect = require 'expect.js'
 {component, div, render, img, text, button} = require '..'
 
-console.log {component, div, render}
 describe 'Component', ->
 
   it 'takes arguments', ->
