@@ -133,6 +133,7 @@ class Teacup
     attrs = {}
     selector = null
     contents = null
+
     for arg, index in args when arg?
       switch typeof arg
         when 'string'
@@ -237,7 +238,7 @@ class Teacup
     bound = {}
 
     boundMethodNames = [].concat(
-      'cede coffeescript comment doctype escape ie normalizeArgs raw render renderable script tag text use'.split(' ')
+      'cede coffeescript comment component doctype escape ie normalizeArgs raw render renderable script tag text use'.split(' ')
       merge_elements 'regular', 'obsolete', 'raw', 'void', 'obsolete_void'
     )
     for method in boundMethodNames
@@ -245,6 +246,10 @@ class Teacup
         bound[method] = (args...) => @[method].apply @, args
 
     return bound
+
+  component: (func) ->
+    (args...) ->
+      func.apply(@, args)
 
 # Define tag functions on the prototype for pretty stack traces
 for tagName in merge_elements 'regular', 'obsolete'
