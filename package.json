@@ -1,6 +1,6 @@
 {
   "name": "teacup",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Render HTML with native CoffeeScript templates. No magic, no fuss.",
   "homepage": "http://goodeggs.github.com/teacup/",
   "main": "lib/teacup",
