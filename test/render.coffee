@@ -15,10 +15,10 @@ describe 'render', ->
           raw "This text could use #{cede -> strong -> a href: '/', 'a link'}."
       expect(render template).to.equal '<p>This text could use <strong><a href="/">a link</a></strong>.</p>'
 
-    it 'doesn\'t modify the attributes object', ->
-      d = { id: 'foobar', class: 'myclass', href: 'http://example.com', }
-      template = ->
-        p ->
-          a d, "link 1"
-          a d, "link 2"
-      expect(render template).to.equal '<p><a id="foobar" class="myclass" href="http://example.com">link 1</a><a id="foobar" class="myclass" href="http://example.com">link 2</a></p>'
+  it 'doesn\'t modify the attributes object', ->
+    d = { id: 'foobar', class: 'myclass', href: 'http://example.com', }
+    template = ->
+      p ->
+        a d, "link 1"
+        a d, "link 2"
+    expect(render template).to.equal '<p><a id="foobar" class="myclass" href="http://example.com">link 1</a><a id="foobar" class="myclass" href="http://example.com">link 2</a></p>'

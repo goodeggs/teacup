@@ -15,7 +15,7 @@ describe 'express', ->
         expect(rendered).to.equal '<p>Name is Foo</p>'
         done()
 
-    it "returns error if not found", (done) ->
+    it 'calls back with an error if the template is not found', (done) ->
       renderFile './not_found.coffee', params, (err, rendered) ->
         expect(err).not.to.be(undefined)
         done()
