@@ -1,4 +1,5 @@
 expect = require 'expect.js'
+teacup = require '..'
 {renderFile} = require '../lib/express'
 
 describe 'express', ->
@@ -19,6 +20,14 @@ describe 'express', ->
       renderFile './not_found.coffee', params, (err, rendered) ->
         expect(err).not.to.be(undefined)
         done()
+
+    it 'renders in an independent event loop, to escape fibers if used', (done) ->
+      global.teacupTestRendered = false
+      renderFile path, params, (err, rendered) ->
+        return done(err) if err?
+        expect(global.teacupTestRendered).to.equal true
+        done()
+      expect(global.teacupTestRendered).to.equal false
 
     describe 'with view cache enabled', ->
       beforeEach ->
