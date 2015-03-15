@@ -25,12 +25,16 @@
     "coffee-script": ">=1.8.0",
     "connect-assets": "*",
     "mocha": "*",
-    "expect.js": "*"
+    "expect.js": "*",
+    "benchmark": "~1.0.0",
+    "jade": "~1.9.2",
+    "dot": "~1.0.3"
   },
   "scripts": {
     "pretest": "npm run compile",
     "prepublish": "npm run compile",
     "test": "mocha",
-    "compile": "coffee --compile --output lib/ src/"
+    "compile": "coffee --compile --output lib/ src/",
+    "benchmark": "coffee benchmark/index.coffee"
   }
 }
