@@ -1,3 +1,6 @@
+**v1.2.0** (2015-03-16)
+- [Prevent buffer corruption](https://github.com/goodeggs/teacup/pull/51) combing teacup with express and fibers.
+
 **v1.0.0** (2014-10-26)
 
  - Not a particularly significant release.  Bumped to 1.0 at [isaacs recommendation](https://github.com/npm/init-package-json/commit/363a17bc31bf653bb9575105eea62fb4664ad04b)
