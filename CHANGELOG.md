@@ -1,3 +1,6 @@
+**v2.0.0** (2015-06-23)
+- [HTML escape script tag content](https://github.com/goodeggs/teacup/pull/54). If you escape the content in your app, you can still nest @raw inside the script tag.
+
 **v1.2.0** (2015-03-16)
 - [Prevent buffer corruption](https://github.com/goodeggs/teacup/pull/51) combing teacup with express and fibers.
 
