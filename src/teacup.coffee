@@ -21,7 +21,9 @@ elements =
  select small span strong sub summary sup table tbody td textarea tfoot
  th thead time title tr u ul video'
 
-  raw: 'script style'
+  raw: 'style'
+
+  script: 'script'
 
   # Valid self-closing HTML 5 elements.
   void: 'area base br col command embed hr img input keygen link meta param
@@ -174,6 +176,13 @@ class Teacup
     @raw contents
     @raw "</#{tagName}>"
 
+  scriptTag: (tagName, args...) ->
+    {attrs, contents} = @normalizeArgs args
+    @raw "<#{tagName}#{@renderAttrs attrs}>"
+    @renderContents contents
+    @raw "</#{tagName}>"
+
+
   selfClosingTag: (tag, args...) ->
     {attrs, contents} = @normalizeArgs args
     if contents
@@ -186,7 +195,7 @@ class Teacup
           __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
           __hasProp = {}.hasOwnProperty,
           __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-      (#{fn.toString()})();
+      (#{@escape fn.toString()})();
     })();</script>"""
 
   comment: (text) ->
@@ -264,6 +273,10 @@ for tagName in merge_elements 'regular', 'obsolete'
 for tagName in merge_elements 'raw'
   do (tagName) ->
     Teacup::[tagName] = (args...) -> @rawTag tagName, args...
+
+for tagName in merge_elements 'script'
+  do (tagName) ->
+    Teacup::[tagName] = (args...) -> @scriptTag tagName, args...
 
 for tagName in merge_elements 'void', 'obsolete_void'
   do (tagName) ->
