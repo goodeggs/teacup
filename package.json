@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "Render HTML with native CoffeeScript templates. No magic, no fuss.",
   "homepage": "http://goodeggs.github.com/teacup/",
+  "license": "MIT",
   "main": "lib/teacup",
   "repository": {
     "type": "git",
