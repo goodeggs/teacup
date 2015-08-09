@@ -29,8 +29,8 @@ describe 'raw filter', ->
 
 describe 'script tag', ->
   it 'escapes /', ->
-    user = name: '</script><script>alert("alert");</script>'
+    user = name: '</script ><script>alert("alert");</script>'
     template = ->
       script "window.user = #{JSON.stringify user}"
 
-    expect(render template).to.equal '<script>window.user = {&quot;name&quot;:&quot;&lt;/script&gt;&lt;script&gt;alert(\\&quot;alert\\&quot;);&lt;/script&gt;&quot;}</script>'
+    expect(render template).to.equal '<script>window.user = {"name":"<\\/script ><script>alert(\\"alert\\");<\\/script>"}</script>'

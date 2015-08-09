@@ -1,3 +1,4 @@
+
 doctypes =
   'default': '<!DOCTYPE html>'
   '5': '<!DOCTYPE html>'
@@ -179,9 +180,8 @@ class Teacup
   scriptTag: (tagName, args...) ->
     {attrs, contents} = @normalizeArgs args
     @raw "<#{tagName}#{@renderAttrs attrs}>"
-    @renderContents contents
+    @raw @scriptEscape(contents) if contents?
     @raw "</#{tagName}>"
-
 
   selfClosingTag: (tag, args...) ->
     {attrs, contents} = @normalizeArgs args
@@ -195,7 +195,7 @@ class Teacup
           __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
           __hasProp = {}.hasOwnProperty,
           __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-      (#{@escape fn.toString()})();
+      (#{@scriptEscape fn.toString()})();
     })();</script>"""
 
   comment: (text) ->
@@ -232,6 +232,11 @@ class Teacup
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
 
+  scriptEscape: do ->
+    matcher = /<\/script([\s>\/])/g
+    (str) ->
+      str.replace matcher, '<\\/script$1'
+  
   quote: (value) ->
     "\"#{value}\""
 
