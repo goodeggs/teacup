@@ -48,18 +48,52 @@ class Teacup
   constructor: ->
     @htmlOut = null
 
+    # use queue for async rendering
+    # anywhere htmlOut is modified we need to queue the update
+    # opening tags go to htmlOut immediately
+    # contents run immediately and delay further action until it's done
+    # closing tags wait for contents to finish
+    @queue =
+      items: []
+      insert: (index, fn) ->
+        @queue.items.splice index, 0, fn
+        @queue.run()
+      unshift: (fn) =>
+        @queue.items.unshift fn
+        @queue.running = false
+        @queue.run()
+      push: (fn) =>
+        @queue.items.push fn
+        @queue.run()
+      run: =>
+        return if @queue.running
+        return if @queue.items.length == 0
+        @queue.running = true
+        fn = @queue.items.shift()
+        fn =>
+          @queue.running = false
+          @queue.run()
+      running: false
+
   resetBuffer: (html=null) ->
     previous = @htmlOut
     @htmlOut = html
     return previous
 
-  render: (template, args...) ->
+  render: (template, args..., callback) ->
     previous = @resetBuffer('')
     try
-      template(args...)
+      template args...
     finally
-      result = @resetBuffer previous
-    return result
+      if callback
+        @queue.push (done) =>
+          result = @resetBuffer previous
+          done()
+          callback result
+        return null
+      else
+        result = @resetBuffer previous
+        return result
 
   # alias render for coffeecup compatibility
   cede: (args...) -> @render(args...)
@@ -107,14 +141,22 @@ class Teacup
 
     return result
 
+  # TODO: add back in component support
   renderContents: (contents, rest...) ->
-    if not contents?
-      return
-    else if typeof contents is 'function'
-      result = contents.apply @, rest
-      @text result if typeof result is 'string'
-    else
-      @text contents
+    @queue.unshift (done) =>
+      if not contents?
+        return done()
+      else if typeof contents is 'function'
+        if contents.length is 0
+          result = contents.apply @
+          @text result if typeof result is 'string'
+          done()
+        else if contents.length is 1
+          contents.call @, ->
+            done()
+      else
+        @text contents
+        done()
 
   isSelector: (string) ->
     string.length > 1 and string.charAt(0) in ['#', '.']
@@ -165,10 +207,21 @@ class Teacup
     return {attrs, contents, selector}
 
   tag: (tagName, args...) ->
+    console.log 'tag', tagName
     {attrs, contents} = @normalizeArgs args
-    @raw "<#{tagName}#{@renderAttrs attrs}>"
-    @renderContents contents
-    @raw "</#{tagName}>"
+    @queue.unshift (done) =>
+      @raw "<#{tagName}#{@renderAttrs attrs}>"
+      done()
+    if not contents or contents?.length is 0
+      @renderContents contents
+      @queue.push (done) =>
+        @raw "</#{tagName}>"
+        done()
+    else
+      @renderContents contents
+      @queue.push (done) =>
+        @raw "</#{tagName}>"
+        done()
 
   rawTag: (tagName, args...) ->
     {attrs, contents} = @normalizeArgs args
@@ -181,7 +234,6 @@ class Teacup
     @raw "<#{tagName}#{@renderAttrs attrs}>"
     @renderContents contents
     @raw "</#{tagName}>"
-
 
   selfClosingTag: (tag, args...) ->
     {attrs, contents} = @normalizeArgs args
@@ -210,12 +262,14 @@ class Teacup
     @raw "<![endif]-->"
 
   text: (s) ->
+    console.log 'text', s
     unless @htmlOut?
       throw new Error("Teacup: can't call a tag function outside a rendering context")
     @htmlOut += s? and @escape(s.toString()) or ''
     null
 
   raw: (s) ->
+    console.log 'raw', s
     return unless s?
     @htmlOut += s
     null
