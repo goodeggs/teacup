@@ -1,0 +1,20 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/bryant/.nvm/v0.10.40/bin/node',
+1 verbose cli   '/Users/bryant/.nvm/v0.10.40/bin/npm',
+1 verbose cli   'test',
+1 verbose cli   'async' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.40
+4 error Error: ENOENT, open '/Users/bryant/dev/scien/teacup/node_modules/async/package.json'
+5 error If you need help, you may report this *entire* log,
+5 error including the npm and node versions, at:
+5 error     <http://github.com/npm/npm/issues>
+6 error System Darwin 15.0.0
+7 error command "/Users/bryant/.nvm/v0.10.40/bin/node" "/Users/bryant/.nvm/v0.10.40/bin/npm" "test" "async"
+8 error cwd /Users/bryant/dev/scien/teacup
+9 error node -v v0.10.40
+10 error npm -v 1.4.28
+11 error path /Users/bryant/dev/scien/teacup/node_modules/async/package.json
+12 error code ENOENT
+13 error errno 34
+14 verbose exit [ 34, true ]
