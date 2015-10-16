@@ -66,7 +66,7 @@ class Queue
     return if @items.length == 0
     @running = true
     fn = @items.shift()
-    log 'Queue', @uid, 'fn', fn
+    log 'Queue', @uid, 'fn'
     fn =>
       log 'Queue', @uid, 'fn complete'
       @running = false

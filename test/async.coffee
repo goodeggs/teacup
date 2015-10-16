@@ -127,16 +127,15 @@ describe 'rendering flow', ->
   it 'async: complex 2', (done) ->
     render ( ->
       div (done) ->
-        text '2'
         setTimeout ( ->
-          a -> '3'
-          div (done2) ->
+          text '1'
+          span (done2) ->
             setTimeout ( ->
-              a -> '5'
+              text '2'
               done2()
             ), 10
           done()
         ), 10
     ), (html) ->
-      expect(html).to.equal '<div>1</div><div><span>2</span><span>3</span></div><div>4</div>'
+      expect(html).to.equal '<div>1<span>2</span></div>'
       done()
