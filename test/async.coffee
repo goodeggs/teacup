@@ -168,15 +168,11 @@ describe 'Async', ->
     html = render template, {name: 'bryant'}
     expect(html).to.equal '<div>bryant</div>'
 
-
-  # TODO: fix component (component.coffee)
-  # TODO: fix nested rendering (render.coffee)
   it 'renderable works', (done) ->
     template = renderable ( ->
       div ->
         'hello world'
     )
-
     template (html) ->
       expect(html).to.contain 'hello world'
       done()
