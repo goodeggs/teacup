@@ -219,70 +219,47 @@ class Teacup
 
   tag: (tagName, args...) ->
     {attrs, contents} = @normalizeArgs args
-    @queue.push "open tag: #{tagName}", (done) =>
-      @queue.position = 2
-      @raw "<#{tagName}#{@renderAttrs attrs}>"
-      done()
-    @queue.push "tag contents: #{tagName}", (done) =>
-      @queue.position = 2
-      @renderContents contents
-      done()
-    @queue.push "close tag: #{tagName}", (done) =>
-      @queue.position = 2
-      @raw "</#{tagName}>"
-      done()
+    @raw "<#{tagName}#{@renderAttrs attrs}>"
+    @renderContents contents
+    @raw "</#{tagName}>"
 
   rawTag: (tagName, args...) ->
     {attrs, contents} = @normalizeArgs args
-    @queue.push "raw tag: #{tagName}", (done) =>
-      @raw "<#{tagName}#{@renderAttrs attrs}>"
-      @raw contents
-      @raw "</#{tagName}>"
-      done()
+    @raw "<#{tagName}#{@renderAttrs attrs}>"
+    @raw contents
+    @raw "</#{tagName}>"
 
   scriptTag: (tagName, args...) ->
     {attrs, contents} = @normalizeArgs args
-    @queue.push "script: #{tagName}", (done) =>
-      @raw "<#{tagName}#{@renderAttrs attrs}>"
-      @renderContents contents
-      @raw "</#{tagName}>"
-      done()
+    @raw "<#{tagName}#{@renderAttrs attrs}>"
+    @renderContents contents
+    @raw "</#{tagName}>"
 
   selfClosingTag: (tag, args...) ->
     {attrs, contents} = @normalizeArgs args
     if contents
       throw new Error "Teacup: <#{tag}/> must not have content.  Attempted to nest #{contents}"
-    @queue.push "self closing tag: #{tag}", (done) =>
-      @raw "<#{tag}#{@renderAttrs attrs} />"
-      done()
+    @raw "<#{tag}#{@renderAttrs attrs} />"
 
   coffeescript: (fn) ->
-    @queue.push "coffeescript: #{fn}", (done) =>
-      @raw """<script type="text/javascript">(function() {
-        var __slice = [].slice,
-            __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-            __hasProp = {}.hasOwnProperty,
-            __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-        (#{@escape fn.toString()})();
-      })();</script>"""
-      done()
+    @raw """<script type="text/javascript">(function() {
+      var __slice = [].slice,
+          __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+          __hasProp = {}.hasOwnProperty,
+          __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+      (#{@escape fn.toString()})();
+    })();</script>"""
 
   comment: (text) ->
-    @queue.push "comment: #{text}", (done) =>
-      @raw "<!--#{@escape text}-->"
-      done()
+    @raw "<!--#{@escape text}-->"
 
   doctype: (type=5) ->
-    @queue.push "doctype: #{type}", (done) =>
-      @raw doctypes[type]
-      done()
+    @raw doctypes[type]
 
   ie: (condition, contents) ->
-    @queue.push "ie: #{condition}", (done) =>
-      @raw "<!--[if #{@escape condition}]>"
-      @renderContents contents
-      @raw "<![endif]-->"
-      done()
+    @raw "<!--[if #{@escape condition}]>"
+    @renderContents contents
+    @raw "<![endif]-->"
 
   text: (s) ->
     unless @htmlOut?

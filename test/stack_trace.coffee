@@ -10,5 +10,6 @@ describe 'stack trace', ->
     try
       template()
     catch error
+      console.log error.stack
       expect(error.stack).to.contain 'div'
       expect(error.stack).to.contain 'p'
