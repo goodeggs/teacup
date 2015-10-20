@@ -159,24 +159,19 @@ class Teacup
 
   # TODO: add back in component support
   renderContents: (contents, rest...) ->
-    if not contents?
-      return
-    else if typeof contents is 'function'
-      if contents.length is 0
-        @queue.push "sync contents: #{contents}", (done) =>
-          @queue.position = 0
+    return if not contents?
+    @queue.push "sync contents: #{contents}", (done) =>
+      @queue.position = 0
+      if typeof contents is 'function'
+        if contents.length is 0
           result = contents.apply @
           @text result if typeof result is 'string'
           done()
-      else if contents.length is 1
-        @queue.push "async contents: #{contents}", (done) =>
-          @queue.position = 0
+        else if contents.length is 1
           log 'SET POSITION TO 0'
           contents.call @, ->
             done()
-    else
-      @queue.push "text contents: #{contents}", (done) =>
-        @queue.position = 0
+      else
         @text contents
         done()
 
