@@ -1,3 +1,5 @@
+log = console.log
+
 doctypes =
   'default': '<!DOCTYPE html>'
   '5': '<!DOCTYPE html>'
@@ -43,6 +45,44 @@ merge_elements = (args...) ->
       result.push element unless element in result
   result
 
+# use queue for async rendering
+# anywhere htmlOut is modified we need to queue the update
+# opening tags go to htmlOut immediately
+# contents run immediately and delay further action until it's done
+# closing tags wait for contents to finish
+class Queue
+
+  constructor: (options) ->
+    @debug = false
+    @items = []
+    @names = []
+    @position = 0
+    @running = false
+
+  push: (name, fn) ->
+    @names.splice @position, 0, name
+    @items.splice @position, 0, fn
+    log 'push', @position, name if @debug
+    @print()
+    @position++
+
+  print: ->
+    if @debug
+      log JSON.stringify @names, null, 2
+      log ''
+
+  run: ->
+    return if @running
+    return @drain?() if @items.length == 0
+    @running = true
+    name = @names.shift()
+    fn = @items.shift()
+    @position--
+    log 'run', name if @debug
+    @print()
+    fn =>
+      @running = false
+      @run()
 
 class Teacup
   constructor: ->
@@ -54,28 +94,25 @@ class Teacup
     return previous
 
   render: (template, args...) ->
+    if typeof args[args.length - 1] is 'function'
+      callback = args.pop()
+
     previous = @resetBuffer('')
-    try
-      template(args...)
-    finally
+    result = null
+    @queue = new Queue()
+    template args...
+    @queue.drain = =>
       result = @resetBuffer previous
+      callback result if callback
+    @queue.run()
     return result
 
   # alias render for coffeecup compatibility
   cede: (args...) -> @render(args...)
 
   renderable: (template) ->
-    teacup = @
-    return (args...) ->
-      if teacup.htmlOut is null
-        teacup.htmlOut = ''
-        try
-          template.apply @, args
-        finally
-          result = teacup.resetBuffer()
-        return result
-      else
-        template.apply @, args
+    return (args...) =>
+      @render template, args...
 
   renderAttr: (name, value) ->
     if not value?
@@ -110,11 +147,19 @@ class Teacup
   renderContents: (contents, rest...) ->
     if not contents?
       return
-    else if typeof contents is 'function'
-      result = contents.apply @, rest
-      @text result if typeof result is 'string'
-    else
-      @text contents
+    @queue.push "contents: #{contents}", (done) =>
+      @queue.position = 0
+      if typeof contents is 'function'
+        if contents.length is 0 or contents.length is rest.length
+          result = contents.apply @, rest
+          @text result if typeof result is 'string'
+          done()
+        else if contents.length is 1
+          contents.call @, ->
+            done()
+      else
+        @text contents
+        done()
 
   isSelector: (string) ->
     string.length > 1 and string.charAt(0) in ['#', '.']
@@ -182,7 +227,6 @@ class Teacup
     @renderContents contents
     @raw "</#{tagName}>"
 
-
   selfClosingTag: (tag, args...) ->
     {attrs, contents} = @normalizeArgs args
     if contents
@@ -212,13 +256,17 @@ class Teacup
   text: (s) ->
     unless @htmlOut?
       throw new Error("Teacup: can't call a tag function outside a rendering context")
-    @htmlOut += s? and @escape(s.toString()) or ''
+    @queue.push "text: #{s}", (done) =>
+      @htmlOut += s? and @escape(s.toString()) or ''
+      done()
     null
 
   raw: (s) ->
     return unless s?
-    @htmlOut += s
-    null
+    @queue.push "raw: #{s}", (done) =>
+      @htmlOut += s
+      done()
+    return null
 
   #
   # Filters
