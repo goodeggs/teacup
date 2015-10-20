@@ -53,29 +53,41 @@ merge_elements = (args...) ->
 class Queue
 
   constructor: (options) ->
-    @uid = options.uid
+    @debug = true
     @items = []
+    @names = []
+    @position = 0
     @running = false
 
-  push: (fn) ->
-    @items.push fn
+  push: (name, fn) ->
+    @names.splice @position, 0, name
+    @items.splice @position, 0, fn
+    log 'push', @position, name if @debug
+    @print()
+    @position++
+
+  print: ->
+    if @debug
+      log JSON.stringify @names, null, 2
+      log ''
 
   run: ->
-    log 'Queue.run', @uid
     return if @running
-    return if @items.length == 0
+    return @drain?() if @items.length == 0
     @running = true
+    name = @names.shift()
     fn = @items.shift()
-    log 'Queue', @uid, 'fn'
+    @position--
+    log 'run', name if @debug
+    @print()
     fn =>
-      log 'Queue', @uid, 'fn complete'
       @running = false
       @run()
 
 class Teacup
   constructor: ->
     @htmlOut = null
-    @queue = {}
+    @queue = new Queue()
 
   resetBuffer: (html=null) ->
     previous = @htmlOut
@@ -83,25 +95,17 @@ class Teacup
     return previous
 
   render: (template, args..., callback) ->
-    @depth = 0
-    @queue[0] = new Queue {uid: 0}
     previous = @resetBuffer('')
     if callback
-      log 'render: callback'
       @renderContents template, args...
-      @queue[0].push (done) =>
-        log 'finish queue', 0
-        done()
+      @queue.drain = =>
         result = @resetBuffer previous
         callback result
-      log 'run queue', 0
-      @queue[0].run()
+      @queue.run()
     else
       try
-        log 'render: no callback'
         @renderContents template, args...
-        log 'run queue', 0
-        @queue[0].run()
+        @queue.run()
       catch err
         throw err
       result = @resetBuffer previous
@@ -154,35 +158,27 @@ class Teacup
     return result
 
   # TODO: add back in component support
-  renderContents: (contents, rest..., done) ->
+  renderContents: (contents, rest...) ->
     if not contents?
-      return done?()
+      return
     else if typeof contents is 'function'
       if contents.length is 0
-        log 'renderContents: sync'
-        result = contents.apply @
-        @text result if typeof result is 'string'
-        done?()
-      else if contents.length is 1
-        log 'renderContents: async'
-        log 'contents has arg'
-        @depth++
-        @queue[@depth] = new Queue {uid: @depth}
-        @queue[@depth].push (finish) =>
-          contents.call @, =>
-            log 'done contents'
-            finish()
-        @queue[@depth].push (finish) =>
-          log 'finish queue', @depth
-          @depth--
-          finish()
+        @queue.push "sync contents: #{contents}", (done) =>
+          @queue.position = 0
+          result = contents.apply @
+          @text result if typeof result is 'string'
           done()
-        log 'run queue', @depth
-        @queue[@depth].run()
+      else if contents.length is 1
+        @queue.push "async contents: #{contents}", (done) =>
+          @queue.position = 0
+          log 'SET POSITION TO 0'
+          contents.call @, ->
+            done()
     else
-      log 'renderContents: ', contents
-      @text contents
-      done?()
+      @queue.push "text contents: #{contents}", (done) =>
+        @queue.position = 0
+        @text contents
+        done()
 
   isSelector: (string) ->
     string.length > 1 and string.charAt(0) in ['#', '.']
@@ -233,19 +229,22 @@ class Teacup
     return {attrs, contents, selector}
 
   tag: (tagName, args...) ->
-    log 'push tag', @depth, tagName
-    @queue[@depth].push (done) =>
-      log 'tag', tagName
-      {attrs, contents} = @normalizeArgs args
+    {attrs, contents} = @normalizeArgs args
+    @queue.push "open tag: #{tagName}", (done) =>
+      @queue.position = 2
       @raw "<#{tagName}#{@renderAttrs attrs}>"
-      log 'render tag contents'
-      @renderContents contents, =>
-        log 'done rendering tag contents'
-        @raw "</#{tagName}>"
-        done()
+      done()
+    @queue.push "tag contents: #{tagName}", (done) =>
+      @queue.position = 2
+      @renderContents contents
+      done()
+    @queue.push "close tag: #{tagName}", (done) =>
+      @queue.position = 2
+      @raw "</#{tagName}>"
+      done()
 
   rawTag: (tagName, args...) ->
-    @queue[@depth].push (done) =>
+    @queue.push "raw tag: #{tagname}", (done) =>
       {attrs, contents} = @normalizeArgs args
       @raw "<#{tagName}#{@renderAttrs attrs}>"
       @raw contents
@@ -253,7 +252,7 @@ class Teacup
       done()
 
   scriptTag: (tagName, args...) ->
-    @queue[@depth].push (done) =>
+    @queue.push "script: #{tagName}", (done) =>
       {attrs, contents} = @normalizeArgs args
       @raw "<#{tagName}#{@renderAttrs attrs}>"
       @renderContents contents
@@ -287,17 +286,21 @@ class Teacup
     @raw "<![endif]-->"
 
   text: (s) ->
-    log 'text', s
     unless @htmlOut?
       throw new Error("Teacup: can't call a tag function outside a rendering context")
-    @htmlOut += s? and @escape(s.toString()) or ''
+    @queue.push "text: #{s}", (done) =>
+      log 'text', s
+      @htmlOut += s? and @escape(s.toString()) or ''
+      done()
     null
 
   raw: (s) ->
-    log 'raw', s
     return unless s?
-    @htmlOut += s
-    null
+    @queue.push "raw: #{s}", (done) =>
+      log 'raw', s
+      @htmlOut += s
+      done()
+    return null
 
   #
   # Filters

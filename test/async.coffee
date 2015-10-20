@@ -1,24 +1,16 @@
 expect = require 'expect.js'
-{render, a, div, span, text} = require '..'
+{render, a, b, div, span, text} = require '..'
 
-describe 'rendering flow', ->
+describe 'Async', ->
 
-  it 'sync render', ->
+  it 'works synchronously', ->
     html = render ( ->
       div ->
         'hello world'
     )
     expect(html).to.equal '<div>hello world</div>'
 
-  it 'sync render with sync tag callback', ->
-    html = render ( ->
-      div (done) ->
-        text 'hello world'
-        done()
-    )
-    expect(html).to.equal '<div>hello world</div>'
-
-  it 'async render', (done) ->
+  it 'works using render callback', (done) ->
     render ( ->
       div ->
         'hello world'
@@ -26,7 +18,7 @@ describe 'rendering flow', ->
       expect(html).to.equal '<div>hello world</div>'
       done()
 
-  it 'async render with sync tag callback', (done) ->
+  it 'works with a tag callback that is synchronous', (done) ->
     render ( ->
       div (done) ->
         text 'hello world'
@@ -35,7 +27,18 @@ describe 'rendering flow', ->
       expect(html).to.equal '<div>hello world</div>'
       done()
 
-  it 'async render with 3 sync tag callbacks', (done) ->
+  it 'works with a tag callback that is asynchronous', (done) ->
+    render ( ->
+      div (done) ->
+        setTimeout ( ->
+          text 'hello world'
+          done()
+        ), 1
+    ), (html) ->
+      expect(html).to.equal '<div>hello world</div>'
+      done()
+
+  it 'works with 3 synchronous tag callbacks', (done) ->
     render ( ->
       div (done) ->
         text '1'
@@ -49,93 +52,99 @@ describe 'rendering flow', ->
     ), (html) ->
       expect(html).to.equal '<div>1<div>2<div>3</div></div></div>'
       done()
-
-  it 'async render with async tag callback and text content', (done) ->
+  
+  it 'works with 3 asynchronous tag callbacks', (done) ->
     render ( ->
       div (done) ->
         setTimeout ( ->
-          text 'hello world'
+          text '1'
+          div (done2) ->
+            setTimeout ( ->
+              text '2'
+              div (done3) ->
+                setTimeout ( ->
+                  text '3'
+                  done3()
+                ), 1
+              done2()
+            ), 1
+          done()
+        ), 1
+    ), (html) ->
+      expect(html).to.equal '<div>1<div>2<div>3</div></div></div>'
+      done()
+
+  it 'works with tag callback and div content', (done) ->
+    render ( ->
+      div (done) ->
+        setTimeout ( ->
+          span ->
+            'hello world'
           done()
         ), 10
     ), (html) ->
-      expect(html).to.equal '<div>hello world</div>'
+      expect(html).to.equal '<div><span>hello world</span></div>'
       done()
-
-  it 'async render with async tag callback and div content', (done) ->
+  
+  it 'works with tag/text next to each others', (done) ->
     render ( ->
-      div (done) ->
-        setTimeout ( ->
-          div ->
-            text 'hello world'
-          done()
-        ), 10
+      span -> 'do'
+      text 're'
+      span -> 'me'
     ), (html) ->
-      expect(html).to.equal '<div><div>hello world</div></div>'
+      expect(html).to.equal '<span>do</span>re<span>me</span>'
       done()
 
-  it 'async: async tag between two sync tags', (done) ->
+  it 'works with multiple async calls in a tag callback', (done) ->
     render ( ->
-      div ->
+      a ->
         '1'
-      div (done) ->
-        setTimeout ( ->
-          text '2'
-          done()
-        )
-      div ->
-        '3'
-    ), (html) ->
-      expect(html).to.equal '<div>1</div><div>2</div><div>3</div>'
-      done()
-
-  it 'async: multiple timeouts', (done) ->
-    render ( ->
-      div ->
-        '1'
-      div (done) ->
+      a (done) ->
         setTimeout ( ->
           text '2'
           setTimeout ( ->
             text '3'
             done()
-          ), 10
-        ), 10
-      div ->
+          ), 1
+        ), 1
+      a ->
         '4'
     ), (html) ->
-      expect(html).to.equal '<div>1</div><div>23</div><div>4</div>'
+      expect(html).to.equal '<a>1</a><a>23</a><a>4</a>'
       done()
 
-  it 'async: complex 1', (done) ->
+  it 'complex test 1', (done) ->
     render ( ->
-      div ->
+      a ->
         '1'
-      div (done) ->
+      a (done) ->
         setTimeout ( ->
-          span -> '2'
+          text 'w'
+          b -> '2'
+          text 'x'
           setTimeout ( ->
-            span -> '3'
+            text 'y'
+            b -> '3'
+            text 'z'
             done()
           ), 10
         ), 10
-      div ->
+      a ->
         '4'
     ), (html) ->
-      expect(html).to.equal '<div>1</div><div><span>2</span><span>3</span></div><div>4</div>'
+      expect(html).to.equal '<a>1</a><a>w<b>2</b>xy<b>3</b>z</a><a>4</a>'
       done()
 
-  it 'async: complex 2', (done) ->
+  it 'async: async tag inside async tag needs to render in correct order', (done) ->
     render ( ->
-      div (done) ->
-        setTimeout ( ->
-          text '1'
-          span (done2) ->
-            setTimeout ( ->
-              text '2'
-              done2()
-            ), 10
-          done()
-        ), 10
+      div ->
+        a -> '1'
+        span (done2) ->
+          setTimeout ( ->
+            b -> '2'
+            done2()
+          ), 10
+        a -> '3'
     ), (html) ->
-      expect(html).to.equal '<div>1<span>2</span></div>'
+      expect(html).to.equal '<div><a>1</a><span><b>2</b></span><a>3</a></div>'
       done()
