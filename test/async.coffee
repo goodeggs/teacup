@@ -38,7 +38,7 @@ describe 'Async', ->
       expect(html).to.equal '<div>hello world</div>'
       done()
 
-  it 'works with 3 synchronous tag callbacks', (done) ->
+  it 'works with 3 nested synchronous tag callbacks', (done) ->
     render ( ->
       div (done) ->
         text '1'
@@ -53,7 +53,7 @@ describe 'Async', ->
       expect(html).to.equal '<div>1<div>2<div>3</div></div></div>'
       done()
   
-  it 'works with 3 asynchronous tag callbacks', (done) ->
+  it 'works with 3 nested asynchronous tag callbacks', (done) ->
     render ( ->
       div (done) ->
         setTimeout ( ->
@@ -72,6 +72,22 @@ describe 'Async', ->
         ), 1
     ), (html) ->
       expect(html).to.equal '<div>1<div>2<div>3</div></div></div>'
+      done()
+
+  it 'works with 2 non-nested asynchronous tag callbacks', (done) ->
+    render ( ->
+      div (done) ->
+        setTimeout ( ->
+          text '1'
+          done()
+        ), 1
+      div (done) ->
+        setTimeout ( ->
+          text '2'
+          done()
+        ), 1
+    ), (html) ->
+      expect(html).to.equal '<div>1</div><div>2</div>'
       done()
 
   it 'works with tag callback and div content', (done) ->
