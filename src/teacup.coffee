@@ -87,7 +87,6 @@ class Queue
 class Teacup
   constructor: ->
     @htmlOut = null
-    @queue = new Queue()
 
   resetBuffer: (html=null) ->
     previous = @htmlOut
@@ -100,14 +99,16 @@ class Teacup
 
     previous = @resetBuffer('')
     if callback
-      @renderContents template, args...
+      @queue = new Queue()
+      template.apply @, args
       @queue.drain = =>
         result = @resetBuffer previous
         callback result
       @queue.run()
     else
       try
-        @renderContents template, args...
+        @queue = new Queue()
+        template.apply @, args
         @queue.drain = null
         @queue.run()
       catch err

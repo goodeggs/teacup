@@ -161,13 +161,12 @@ describe 'Async', ->
     expect(html).to.equal '<div><p>world</p></div>'
 
   it 'allows template arguments', ->
-    return
     template = (user) ->
       div ->
         user.name
         
     html = render template, {name: 'bryant'}
-    expect(html).to.equal '<div><p>world</p></div>'
+    expect(html).to.equal '<div>bryant</div>'
 
 
   ###
