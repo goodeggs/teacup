@@ -112,6 +112,7 @@ class Teacup
         @queue.drain = null
         @queue.run()
       catch err
+        log 'ERR', err
         throw err
       finally
         result = @resetBuffer previous
@@ -125,15 +126,15 @@ class Teacup
     return (args...) ->
       if teacup.htmlOut is null
         teacup.htmlOut = ''
-        try
-          template.apply @, args
-          teacup.queue.drain = null
-          teacup.queue.run()
-        finally
-          result = teacup.resetBuffer()
-        return result
-      else
+
+      try
+        teacup.queue = new Queue()
         template.apply @, args
+        teacup.queue.drain = null
+        teacup.queue.run()
+      finally
+        result = teacup.resetBuffer()
+      return result
 
   renderAttr: (name, value) ->
     if not value?
