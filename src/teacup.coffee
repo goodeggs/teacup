@@ -98,22 +98,14 @@ class Teacup
       callback = args.pop()
 
     previous = @resetBuffer('')
-    if callback
-      @queue = new Queue()
-      template args...
-      @queue.drain = =>
-        result = @resetBuffer previous
-        callback result
-      @queue.run()
-    else
-      try
-        @queue = new Queue()
-        template args...
-        @queue.drain = null
-        @queue.run()
-      finally
-        result = @resetBuffer previous
-      return result
+    result = null
+    @queue = new Queue()
+    template args...
+    @queue.drain = =>
+      result = @resetBuffer previous
+      callback result if callback
+    @queue.run()
+    return result
 
   # alias render for coffeecup compatibility
   cede: (args...) -> @render(args...)
