@@ -46,5 +46,4 @@ describe 'coffeekup.org example', ->
             p i for i in [1..max]
           footer ->
             p shoutify('bye')
-
     expect(template()).to.contain 'Just Stuff'

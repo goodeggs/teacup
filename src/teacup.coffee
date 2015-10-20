@@ -53,7 +53,7 @@ merge_elements = (args...) ->
 class Queue
 
   constructor: (options) ->
-    @debug = true
+    @debug = false
     @items = []
     @names = []
     @position = 0
@@ -94,7 +94,10 @@ class Teacup
     @htmlOut = html
     return previous
 
-  render: (template, args..., callback) ->
+  render: (template, args...) ->
+    if typeof args[args.length - 1] is 'function'
+      callback = args.pop()
+
     previous = @resetBuffer('')
     if callback
       @renderContents template, args...
@@ -105,10 +108,12 @@ class Teacup
     else
       try
         @renderContents template, args...
+        @queue.drain = null
         @queue.run()
       catch err
         throw err
-      result = @resetBuffer previous
+      finally
+        result = @resetBuffer previous
       return result
 
   # alias render for coffeecup compatibility
@@ -121,6 +126,8 @@ class Teacup
         teacup.htmlOut = ''
         try
           template.apply @, args
+          teacup.queue.drain = null
+          teacup.queue.run()
         finally
           result = teacup.resetBuffer()
         return result
@@ -160,7 +167,7 @@ class Teacup
   # TODO: add back in component support
   renderContents: (contents, rest...) ->
     return if not contents?
-    @queue.push "sync contents: #{contents}", (done) =>
+    @queue.push "contents: #{contents}", (done) =>
       @queue.position = 0
       if typeof contents is 'function'
         if contents.length is 0
@@ -168,7 +175,6 @@ class Teacup
           @text result if typeof result is 'string'
           done()
         else if contents.length is 1
-          log 'SET POSITION TO 0'
           contents.call @, ->
             done()
       else
@@ -239,16 +245,16 @@ class Teacup
       done()
 
   rawTag: (tagName, args...) ->
-    @queue.push "raw tag: #{tagname}", (done) =>
-      {attrs, contents} = @normalizeArgs args
+    {attrs, contents} = @normalizeArgs args
+    @queue.push "raw tag: #{tagName}", (done) =>
       @raw "<#{tagName}#{@renderAttrs attrs}>"
       @raw contents
       @raw "</#{tagName}>"
       done()
 
   scriptTag: (tagName, args...) ->
+    {attrs, contents} = @normalizeArgs args
     @queue.push "script: #{tagName}", (done) =>
-      {attrs, contents} = @normalizeArgs args
       @raw "<#{tagName}#{@renderAttrs attrs}>"
       @renderContents contents
       @raw "</#{tagName}>"
@@ -258,33 +264,42 @@ class Teacup
     {attrs, contents} = @normalizeArgs args
     if contents
       throw new Error "Teacup: <#{tag}/> must not have content.  Attempted to nest #{contents}"
-    @raw "<#{tag}#{@renderAttrs attrs} />"
+    @queue.push "self closing tag: #{tag}", (done) =>
+      @raw "<#{tag}#{@renderAttrs attrs} />"
+      done()
 
   coffeescript: (fn) ->
-    @raw """<script type="text/javascript">(function() {
-      var __slice = [].slice,
-          __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-          __hasProp = {}.hasOwnProperty,
-          __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-      (#{@escape fn.toString()})();
-    })();</script>"""
+    @queue.push "coffeescript: #{fn}", (done) =>
+      @raw """<script type="text/javascript">(function() {
+        var __slice = [].slice,
+            __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+            __hasProp = {}.hasOwnProperty,
+            __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+        (#{@escape fn.toString()})();
+      })();</script>"""
+      done()
 
   comment: (text) ->
-    @raw "<!--#{@escape text}-->"
+    @queue.push "comment: #{text}", (done) =>
+      @raw "<!--#{@escape text}-->"
+      done()
 
   doctype: (type=5) ->
-    @raw doctypes[type]
+    @queue.push "doctype: #{type}", (done) =>
+      @raw doctypes[type]
+      done()
 
   ie: (condition, contents) ->
-    @raw "<!--[if #{@escape condition}]>"
-    @renderContents contents
-    @raw "<![endif]-->"
+    @queue.push "ie: #{condition}", (done) =>
+      @raw "<!--[if #{@escape condition}]>"
+      @renderContents contents
+      @raw "<![endif]-->"
+      done()
 
   text: (s) ->
     unless @htmlOut?
       throw new Error("Teacup: can't call a tag function outside a rendering context")
     @queue.push "text: #{s}", (done) =>
-      log 'text', s
       @htmlOut += s? and @escape(s.toString()) or ''
       done()
     null
@@ -292,7 +307,6 @@ class Teacup
   raw: (s) ->
     return unless s?
     @queue.push "raw: #{s}", (done) =>
-      log 'raw', s
       @htmlOut += s
       done()
     return null

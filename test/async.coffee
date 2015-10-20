@@ -1,5 +1,5 @@
 expect = require 'expect.js'
-{render, a, b, div, span, text} = require '..'
+{render, renderable, a, b, div, p, span, text} = require '..'
 
 describe 'Async', ->
 
@@ -148,3 +148,36 @@ describe 'Async', ->
     ), (html) ->
       expect(html).to.equal '<div><a>1</a><span><b>2</b></span><a>3</a></div>'
       done()
+
+  it 'works with helpers', ->
+    helper = ->
+      p 'world'
+
+    template = ->
+      div ->
+        helper()
+        
+    html = render template
+    expect(html).to.equal '<div><p>world</p></div>'
+
+  it 'allows template arguments', ->
+    return
+    template = (user) ->
+      div ->
+        user.name
+        
+    html = render template, {name: 'bryant'}
+    expect(html).to.equal '<div><p>world</p></div>'
+
+
+  ###
+  # TODO: fix renderable (check express template as well)
+  # TODO: fix component
+  # TODO
+  #
+  it 'renderable works', (done) ->
+    template = renderable ->
+      div ->
+        'hello world'
+    expect(template()).to.contain 'hello world'
+    ###
