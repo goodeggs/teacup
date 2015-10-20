@@ -144,7 +144,6 @@ class Teacup
 
     return result
 
-  # TODO: add back in component support
   renderContents: (contents, rest...) ->
     if not contents?
       return
