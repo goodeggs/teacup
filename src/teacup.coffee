@@ -122,31 +122,8 @@ class Teacup
   cede: (args...) -> @render(args...)
 
   renderable: (template) ->
-    teacup = @
-    return (args...) ->
-      if teacup.htmlOut is null
-        teacup.htmlOut = ''
-
-      if typeof args[args.length - 1] is 'function'
-        callback = args.pop()
-
-      if callback
-        teacup.queue = new Queue()
-        template.apply @, args
-        teacup.queue.drain = ->
-          result = teacup.resetBuffer()
-          callback result
-        teacup.queue.run()
-
-      else
-        try
-          teacup.queue = new Queue()
-          template.apply @, args
-          teacup.queue.drain = null
-          teacup.queue.run()
-        finally
-          result = teacup.resetBuffer()
-        return result
+    return (args...) =>
+      @render template, args...
 
   renderAttr: (name, value) ->
     if not value?
