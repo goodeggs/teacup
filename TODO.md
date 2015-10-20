@@ -1,4 +1,0 @@
- - nested render and renderable calls
-  - potential solution: store both queue and htmlOut in buffer
-  - or create new teacup instance for each render
- - stack trace
