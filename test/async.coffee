@@ -169,15 +169,15 @@ describe 'Async', ->
     expect(html).to.equal '<div>bryant</div>'
 
 
-  ###
-  # TODO: fix renderable (express.coffee)
   # TODO: fix component (component.coffee)
   # TODO: fix coffeekup_org-sample.coffee
   # TODO: fix nested rendering (render.coffee)
-  #
   it 'renderable works', (done) ->
-    template = renderable ->
+    template = renderable ( ->
       div ->
         'hello world'
-    expect(template()).to.contain 'hello world'
-    ###
+    )
+
+    template (html) ->
+      expect(html).to.contain 'hello world'
+      done()

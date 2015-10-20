@@ -127,14 +127,26 @@ class Teacup
       if teacup.htmlOut is null
         teacup.htmlOut = ''
 
-      try
+      if typeof args[args.length - 1] is 'function'
+        callback = args.pop()
+
+      if callback
         teacup.queue = new Queue()
         template.apply @, args
-        teacup.queue.drain = null
+        teacup.queue.drain = ->
+          result = teacup.resetBuffer()
+          callback result
         teacup.queue.run()
-      finally
-        result = teacup.resetBuffer()
-      return result
+
+      else
+        try
+          teacup.queue = new Queue()
+          template.apply @, args
+          teacup.queue.drain = null
+          teacup.queue.run()
+        finally
+          result = teacup.resetBuffer()
+        return result
 
   renderAttr: (name, value) ->
     if not value?
