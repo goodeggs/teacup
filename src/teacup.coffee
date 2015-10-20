@@ -112,7 +112,6 @@ class Teacup
         @queue.drain = null
         @queue.run()
       catch err
-        log 'ERR', err
         throw err
       finally
         result = @resetBuffer previous
@@ -161,8 +160,8 @@ class Teacup
     @queue.push "contents: #{contents}", (done) =>
       @queue.position = 0
       if typeof contents is 'function'
-        if contents.length is 0
-          result = contents.apply @
+        if contents.length is 0 or contents.length is rest.length
+          result = contents.apply @, rest
           @text result if typeof result is 'string'
           done()
         else if contents.length is 1
