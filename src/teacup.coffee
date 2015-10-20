@@ -154,7 +154,8 @@ class Teacup
 
   # TODO: add back in component support
   renderContents: (contents, rest...) ->
-    return if not contents?
+    if not contents?
+      return
     @queue.push "contents: #{contents}", (done) =>
       @queue.position = 0
       if typeof contents is 'function'
