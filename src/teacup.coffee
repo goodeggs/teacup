@@ -100,7 +100,7 @@ class Teacup
     previous = @resetBuffer('')
     if callback
       @queue = new Queue()
-      template.apply @, args
+      template args...
       @queue.drain = =>
         result = @resetBuffer previous
         callback result
@@ -108,11 +108,9 @@ class Teacup
     else
       try
         @queue = new Queue()
-        template.apply @, args
+        template args...
         @queue.drain = null
         @queue.run()
-      catch err
-        throw err
       finally
         result = @resetBuffer previous
       return result

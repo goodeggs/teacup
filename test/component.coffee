@@ -39,7 +39,6 @@ describe 'Component', ->
 
     template = ->
       modal (closeButton) ->
-        console.log 'CLOSE BUTTON', closeButton
         text 'close me: '
         closeButton()
 
