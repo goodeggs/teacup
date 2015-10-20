@@ -170,7 +170,6 @@ describe 'Async', ->
 
 
   # TODO: fix component (component.coffee)
-  # TODO: fix coffeekup_org-sample.coffee
   # TODO: fix nested rendering (render.coffee)
   it 'renderable works', (done) ->
     template = renderable ( ->
