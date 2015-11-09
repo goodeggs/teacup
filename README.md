@@ -4,7 +4,7 @@ Teacup is templates in CoffeeScript.
 
 Compose DSL functions to build strings of HTML.
 Package templates and helpers in CommonJS, AMD modules, or vanilla coffeescript.
-Integrate with the tools you love: Express, Backbone, Rails, and more.
+Integrate with the tools you love: Express, Backbone, Rails, React, and more.
 
 [![Build Status](http://img.shields.io/travis/goodeggs/teacup.svg?style=flat-square)](https://travis-ci.org/goodeggs/teacup)
 [![NPM version](http://img.shields.io/npm/v/teacup.svg?style=flat-square)](https://www.npmjs.org/package/teacup)
@@ -163,6 +163,11 @@ Check out [teacup-backbone-example](https://github.com/goodeggs/teacup-backbone-
 ### Rails
 
 The [Teacup::Rails](https://github.com/goodeggs/teacup-rails) gem makes Teacup available to the asset pipeline in Rails 3.1+.
+
+### React
+
+Check out [Teact](https://github.com/hurrymaplelad/teact) for syntax-compatible integration
+with the react virtual DOM.
 
 Guide
 ---------
