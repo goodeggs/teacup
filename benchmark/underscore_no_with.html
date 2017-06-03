@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title><%- data.title %></title>
+  <style>
+    body {font-family: "sans-serif"}
+    section, header {display: block}
+  </style>
+</head>
+<body>
+  <section>
+    <header>
+      <h1><%- data.title %></h1>
+    </header>
+  </section>
+  <% if (data.inspired) { %>
+    <p>Create a witty example</p>
+  <% } else { %>
+    <p>Go meta</p>
+  <% } %>
+  <ul>
+    <% _.each(data.users, function(user) { %>
+      <li><%- user.name %></li>
+      <li>
+        <a href="mailto:<%- user.email %>"><%- user.email %></a>
+      </li>
+    <% }) %>
+  </ul>
+</body>
+</html>

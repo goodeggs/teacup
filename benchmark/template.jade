@@ -1,0 +1,21 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    title= title
+    style
+      | body {font-family: "sans-serif"}
+      | section, header {display: block}
+  body
+    section
+      header
+        h1= title
+      - if (inspired)
+        p Create a witty example
+      - else
+        p Go meta
+      ul
+        - each user in users
+          li= user.name
+          li
+            a(href="mailto:"+user.email)= user.email
