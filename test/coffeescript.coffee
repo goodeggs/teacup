@@ -19,10 +19,10 @@ describe 'coffeescript', ->
 
   it 'escapes the function contents for script tag', ->
     template = renderable -> coffeescript ->
-      user = name: '</script><script>alert("alert");</script>'
+      user = name: '</script ><script>alert("alert");</script>'
       alert "Hello #{user.name}!"
 
-    expect(template()).to.contain "'&lt;/script&gt;&lt;script&gt;alert(&quot;alert&quot;);&lt;/script&gt;'"
+    expect(template()).to.contain "'<\\/script ><script>alert(\"alert\");<\\/script>'"
 
   # it 'string should render', ->
   #   t = -> coffeescript "alert 'hi'"
