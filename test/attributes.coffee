@@ -43,6 +43,11 @@ describe 'Attributes', ->
       template = -> br data: { name: 'Name', value: 'Value' }
       expect(render template).to.equal '<br data-name="Name" data-value="Value" />'
 
+  describe 'aria attribute', ->
+    it 'expands attributes', ->
+      template = -> br aria: { name: 'Name', value: 'Value' }
+      expect(render template).to.equal '<br aria-name="Name" aria-value="Value" />'
+
   describe 'nested hyphenated attribute', ->
     it 'renders', ->
       template = ->

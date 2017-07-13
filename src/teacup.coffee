@@ -86,6 +86,9 @@ class Teacup
 
     if name is 'data' and typeof value is 'object'
       return (@renderAttr "data-#{k}", v for k,v of value).join('')
+      
+    if name is 'aria' and typeof value is 'object'
+      return (@renderAttr "aria-#{k}", v for k,v of value).join('')
 
     if value is true
       value = name
