@@ -23,13 +23,13 @@
     "express"
   ],
   "devDependencies": {
-    "coffee-script": ">=1.8.0",
-    "connect-assets": "*",
-    "mocha": "*",
-    "expect.js": "*",
     "benchmark": "~1.0.0",
+    "coffeescript": "^2.3.1",
+    "connect-assets": "*",
+    "dot": "~1.0.3",
+    "expect.js": "*",
     "jade": "~1.9.2",
-    "dot": "~1.0.3"
+    "mocha": "*"
   },
   "scripts": {
     "pretest": "npm run compile",
