@@ -27,7 +27,7 @@ describe 'Component', ->
       captioned text: 'La Dura Dura', ->
         img src: '/catalonia/IMG_00182.JPG'
 
-    expect(render template).to.equal '<div class="captioned"><img src="/catalonia/IMG_00182.JPG" /><div class="caption">La Dura Dura</div></div>'
+    expect(render template).to.equal '<div class="captioned"><img src="/catalonia/IMG_00182.JPG" /><div class="caption">La Dura Dura</div></div>' # noqa
 
   it 'lets components provide give contents to their children', ->
     modal = component (selector, attrs, renderContents) ->
@@ -42,4 +42,4 @@ describe 'Component', ->
         text 'close me: '
         closeButton()
 
-    expect(render template).to.equal '<div class="modal">close me: <button>Close</button></div>'
+    expect(render template).to.equal '<div class="modal">close me: <button>Close</button></div>' # noqa

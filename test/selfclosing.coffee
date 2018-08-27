@@ -9,7 +9,7 @@ describe 'Self Closing Tags', ->
       expect(renderable(img) src: 'http://foo.jpg.to')
         .to.equal '<img src="http://foo.jpg.to" />'
     it 'should throw when passed content', ->
-      expect(renderable(-> img 'with some text')).to.throwException /must not have content/ 
+      expect(renderable(-> img 'with some text')).to.throwException /must not have content/ #noqa
   describe '<br />', ->
     it 'should render', ->
       expect(renderable(br)()).to.equal '<br />'

@@ -3,7 +3,7 @@ expect = require 'expect.js'
 
 describe 'nesting templates', ->
   it 'renders nested template in the same output', ->
-    user = 
+    user =
       first: 'Huevo'
       last: 'Bueno'
 

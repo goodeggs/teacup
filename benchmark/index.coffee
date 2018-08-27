@@ -29,7 +29,7 @@ underscored = _.template loadTemplate 'underscore.html'
 suite.add 'underscore', ->
   underscored data
 
-underscoreNoWith = _.template loadTemplate('underscore_no_with.html'), variable: 'data'
+underscoreNoWith = _.template loadTemplate('underscore_no_with.html'), variable: 'data' # noqa
 suite.add 'underscore (no with)', ->
   underscoreNoWith data
 

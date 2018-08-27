@@ -13,7 +13,7 @@ describe 'custom tag', ->
     expect(render template).to.equal '<custom foo="bar" ping="pong"></custom>'
   it 'should render with attributes and content', ->
     template = -> tag 'custom', foo: 'bar', ping: 'pong', 'zag'
-    expect(render template).to.equal '<custom foo="bar" ping="pong">zag</custom>'
+    expect(render template).to.equal '<custom foo="bar" ping="pong">zag</custom>' # noqa
 
 describe 'custom tag-like', ->
   textInput = ->
@@ -27,4 +27,4 @@ describe 'custom tag-like', ->
 
   it 'should accept a selector and attributes', ->
     template = -> textInput '.form-control', placeholder: 'Beep'
-    expect(render template).to.equal '<input class="form-control" placeholder="Beep" type="text" />'
+    expect(render template).to.equal '<input class="form-control" placeholder="Beep" type="text" />' # noqa

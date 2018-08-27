@@ -19,20 +19,20 @@ describe 'CSS Selectors', ->
     describe 'and a class attribute', ->
       it 'prepends the selector class', ->
         template = -> div '.myclass', 'class': 'myattrclass', 'foo'
-        expect(render template).to.equal '<div class="myclass myattrclass">foo</div>'
+        expect(render template).to.equal '<div class="myclass myattrclass">foo</div>' # noqa
 
   describe 'multi-class selector', ->
     it 'adds all the classes', ->
       template = -> div '.myclass.myclass2.myclass3', 'foo'
-      expect(render template).to.equal '<div class="myclass myclass2 myclass3">foo</div>'
+      expect(render template).to.equal '<div class="myclass myclass2 myclass3">foo</div>' # noqa
 
   describe 'with an id and classes, separated by spaces', ->
     it 'adds ids and classes with minimal whitespace', ->
       template = -> div '#myid .myclass1 .myclass2 '
-      expect(render template).to.equal '<div id="myid" class="myclass1 myclass2"></div>'
+      expect(render template).to.equal '<div id="myid" class="myclass1 myclass2"></div>' # noqa
 
   describe 'without contents', ->
     it 'still adds attributes', ->
       template = -> img '#myid.myclass', src: '/pic.png'
-      expect(render template).to.equal '<img id="myid" class="myclass" src="/pic.png" />'
+      expect(render template).to.equal '<img id="myid" class="myclass" src="/pic.png" />' # noqa
 

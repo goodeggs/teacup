@@ -8,4 +8,4 @@ describe 'HereDocs', ->
         alert('test');
       });
     """
-    expect(render template).to.equal '<script>$(document).ready(function(){\n  alert(\'test\');\n});</script>'
+    expect(render template).to.equal '<script>$(document).ready(function(){\n  alert(\'test\');\n});</script>' # noqa
