@@ -13,4 +13,4 @@ describe 'doctype', ->
     expect(render template).to.equal '<!DOCTYPE html>'
   it 'transitional should render transitional doctype', ->
     template = -> doctype 'transitional'
-    expect(render template).to.equal '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
+    expect(render template).to.equal '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' # noqa

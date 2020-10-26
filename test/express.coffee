@@ -21,7 +21,7 @@ describe 'express', ->
         expect(err).not.to.be(undefined)
         done()
 
-    it 'renders in an independent event loop, to escape fibers if used', (done) ->
+    it 'renders in an independent event loop, to escape fibers if used', (done) -> # noqa
       global.teacupTestRendered = false
       renderFile path, params, (err, rendered) ->
         return done(err) if err?

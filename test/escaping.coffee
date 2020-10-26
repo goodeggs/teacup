@@ -5,7 +5,7 @@ describe 'Auto escaping', ->
   describe 'a script tag', ->
     it "adds HTML entities for sensitive characters", ->
       template = -> h1 "<script>alert('\"owned\" by c&a &copy;')</script>"
-      expect(render template).to.equal "<h1>&lt;script&gt;alert('&quot;owned&quot; by c&amp;a &amp;copy;')&lt;/script&gt;</h1>"
+      expect(render template).to.equal "<h1>&lt;script&gt;alert('&quot;owned&quot; by c&amp;a &amp;copy;')&lt;/script&gt;</h1>" # noqa
 
   it 'escapes tag attributes', ->
     template = -> input name: '"pwned'
@@ -33,4 +33,4 @@ describe 'script tag', ->
     template = ->
       script "window.user = #{JSON.stringify user}"
 
-    expect(render template).to.equal '<script>window.user = {&quot;name&quot;:&quot;&lt;/script&gt;&lt;script&gt;alert(\\&quot;alert\\&quot;);&lt;/script&gt;&quot;}</script>'
+    expect(render template).to.equal '<script>window.user = {&quot;name&quot;:&quot;&lt;/script&gt;&lt;script&gt;alert(\\&quot;alert\\&quot;);&lt;/script&gt;&quot;}</script>' # noqa

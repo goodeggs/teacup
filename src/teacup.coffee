@@ -2,13 +2,13 @@ doctypes =
   'default': '<!DOCTYPE html>'
   '5': '<!DOCTYPE html>'
   'xml': '<?xml version="1.0" encoding="utf-8" ?>'
-  'transitional': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
-  'strict': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
-  'frameset': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">'
-  '1.1': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
-  'basic': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">'
-  'mobile': '<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.2//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">'
-  'ce': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "ce-html-1.0-transitional.dtd">'
+  'transitional': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' # noqa
+  'strict': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' # noqa
+  'frameset': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">' # noqa
+  '1.1': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">' # noqa
+  'basic': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">' # noqa
+  'mobile': '<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.2//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">' # noqa
+  'ce': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "ce-html-1.0-transitional.dtd">' # noqa
 
 elements =
   # Valid HTML 5 elements requiring a closing tag.
@@ -86,6 +86,9 @@ class Teacup
 
     if name is 'data' and typeof value is 'object'
       return (@renderAttr "data-#{k}", v for k,v of value).join('')
+      
+    if name is 'aria' and typeof value is 'object'
+      return (@renderAttr "aria-#{k}", v for k,v of value).join('')
 
     if value is true
       value = name
@@ -186,10 +189,11 @@ class Teacup
   selfClosingTag: (tag, args...) ->
     {attrs, contents} = @normalizeArgs args
     if contents
-      throw new Error "Teacup: <#{tag}/> must not have content.  Attempted to nest #{contents}"
+      throw new Error "Teacup: <#{tag}/> must not have content.  Attempted to nest #{contents}" # noqa
     @raw "<#{tag}#{@renderAttrs attrs} />"
 
   coffeescript: (fn) ->
+    # coffeelint: disable=max_line_length
     @raw """<script type="text/javascript">(function() {
       var __slice = [].slice,
           __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
@@ -197,6 +201,7 @@ class Teacup
           __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
       (#{@escape fn.toString()})();
     })();</script>"""
+    # coffeelint: enable=max_line_length
 
   comment: (text) ->
     @raw "<!--#{@escape text}-->"
@@ -211,7 +216,7 @@ class Teacup
 
   text: (s) ->
     unless @htmlOut?
-      throw new Error("Teacup: can't call a tag function outside a rendering context")
+      throw new Error("Teacup: can't call a tag function outside a rendering context") # noqa
     @htmlOut += s? and @escape(s.toString()) or ''
     null
 
@@ -225,7 +230,8 @@ class Teacup
   # return strings instead of appending to buffer
   #
 
-  # Don't escape single quote (') because we always quote attributes with double quote (")
+  # Don't escape single quote (') because
+  # we always quote attributes with double quote (")
   escape: (text) ->
     text.toString().replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
@@ -248,7 +254,7 @@ class Teacup
     bound = {}
 
     boundMethodNames = [].concat(
-      'cede coffeescript comment component doctype escape ie normalizeArgs raw render renderable script tag text use'.split(' ')
+      'cede coffeescript comment component doctype escape ie normalizeArgs raw render renderable script tag text use'.split(' ') # noqa
       merge_elements 'regular', 'obsolete', 'raw', 'void', 'obsolete_void'
     )
     for method in boundMethodNames

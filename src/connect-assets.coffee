@@ -1,13 +1,15 @@
 connectAssets = require 'connect-assets'
 teacup = require '..'
 
-# Returns connect-assets middleware and binds teacup.js and teacup.css to connect-assets helpers
+# Returns connect-assets middleware and
+# binds teacup.js and teacup.css to connect-assets helpers
 #
 # express = require 'express'
 # connectAssets = require 'teacup/connect-assets'
 # app = express()
 # app.configure ->
-#   app.use connectAssets(src: 'assets', jsDir: 'javascripts', cssDir: 'stylesheets')
+#   app.use connectAssets(src: 'assets',
+#           jsDir: 'javascripts', cssDir: 'stylesheets')
 module.exports = (options={}) ->
   # Create helper context, pass it to connect-assets, and reset js & css roots
   options.helperContext = helperContext = {}

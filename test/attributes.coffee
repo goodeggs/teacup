@@ -9,7 +9,7 @@ describe 'Attributes', ->
       expect(render template).to.equal '<a href="/" title="Home"></a>'
 
   describe 'Boolean true value', ->
-    it 'is replaced with the attribute name.  Useful for attributes like disabled', ->
+    it 'is replaced with the attribute name.  Useful for attributes like disabled', -> # noqa
       template = -> br foo: yes, bar: true
       expect(render template).to.equal '<br foo="foo" bar="bar" />'
 
@@ -41,11 +41,16 @@ describe 'Attributes', ->
   describe 'data attribute', ->
     it 'expands attributes', ->
       template = -> br data: { name: 'Name', value: 'Value' }
-      expect(render template).to.equal '<br data-name="Name" data-value="Value" />'
+      expect(render template).to.equal '<br data-name="Name" data-value="Value" />' # noqa
+
+  describe 'aria attribute', ->
+    it 'expands attributes', ->
+      template = -> br aria: { name: 'Name', value: 'Value' }
+      expect(render template).to.equal '<br aria-name="Name" aria-value="Value" />' # noqa
 
   describe 'nested hyphenated attribute', ->
     it 'renders', ->
       template = ->
         div 'on-x': 'beep', ->
           div 'on-y': 'boop'
-      expect(render template).to.equal '<div on-x="beep"><div on-y="boop"></div></div>'
+      expect(render template).to.equal '<div on-x="beep"><div on-y="boop"></div></div>' # noqa
