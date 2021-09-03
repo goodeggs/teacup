@@ -23,18 +23,18 @@
     "express"
   ],
   "devDependencies": {
+    "benchmark": "~1.0.0",
     "coffee-script": ">=1.8.0",
     "connect-assets": "*",
-    "mocha": "*",
+    "dot": "~1.0.3",
     "expect.js": "*",
-    "benchmark": "~1.0.0",
     "jade": "~1.9.2",
-    "dot": "~1.0.3"
+    "mocha": "^9.1.1"
   },
   "scripts": {
-    "pretest": "npm run compile",
-    "prepublish": "npm run compile",
-    "test": "mocha",
+    "pretest": "yarn run compile",
+    "prepublish": "yarn run compile",
+    "test": "mocha --extension coffee --require coffee-script/register",
     "compile": "coffee --compile --output lib/ src/",
     "benchmark": "coffee benchmark/index.coffee"
   }

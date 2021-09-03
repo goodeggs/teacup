@@ -365,8 +365,8 @@ Contributing
 
 ```
 $ git clone https://github.com/goodeggs/teacup && cd teacup
-$ npm install
-$ npm test
+$ yarn install
+$ yarn test
 ```
 
 [Changelog](CHANGELOG.md)
