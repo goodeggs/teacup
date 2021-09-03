@@ -7,8 +7,8 @@ deploy:
   provider: npm
   email: open-source@goodeggs.com
   api_key:
-      secure: "RcZ+H+8shvliF/lWvTkaQc5gRL7JYH89SOf+7o+8KF7/QIJW9ZWYAnAMfYwH7HSpYLkKnL89K3egDwZNsO0faFvhu06MX5MAsek7AJeQ6tW/4KTiPWC0Jp0oQpU1Vk0jmXXy/CTp0YQdTp1ZV7PxTuurLKfnnQJcyXweg4qnDsA="
-  clean_up: false
+      secure: "icYg0/Uoqn+p7IssXSu9gFmtYOvUJ5lemA/MfTnO6QkNqdOSxBuB9jwv3CwiX4kqQTMkidanluMD7xdCz4wVnDuCiIM/P7cN7nMKHFd8vOEJV1Op6FOkOViF1YcVVdaUqQqnoAQhKxG3ELte8ZJ5LEyovBPnae6F+ZZ6gJWRjB4="
+  skip_cleanup: true
   on:
     tags: true
     all_branches: true
