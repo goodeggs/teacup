@@ -32,8 +32,8 @@
     "dot": "~1.0.3"
   },
   "scripts": {
-    "pretest": "npm run compile",
-    "prepublish": "npm run compile",
+    "pretest": "yarn run compile",
+    "prepublish": "yarn run compile",
     "test": "mocha",
     "compile": "coffee --compile --output lib/ src/",
     "benchmark": "coffee benchmark/index.coffee"
