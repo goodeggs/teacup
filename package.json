@@ -26,7 +26,7 @@
     "benchmark": "~1.0.0",
     "coffee-script": ">=1.8.0",
     "connect-assets": "*",
-    "dot": "~1.0.3",
+    "dot": "~1.1.3",
     "expect.js": "*",
     "jade": "~1.9.2",
     "mocha": "^9.1.1"
